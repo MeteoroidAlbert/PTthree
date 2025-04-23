@@ -1,4 +1,4 @@
-import { DragControls, Gltf } from "@react-three/drei";
+import { DragControls, Gltf, Text } from "@react-three/drei";
 import PressureGauge from "./PressureGauge";
 import { BallValve1, BallValve2 } from "./BallValve";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -72,7 +72,7 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
         // 遍歷所有子節點
         set_s_alarm(true)
         groupRef.current.traverse((child) => {
-            if (child.isMesh) {
+            if (child.isMesh && !(child.type === "TextMesh")) {
 
                 child.material = child.material.clone() // 先複製材質 (避免直接修改Gltf src路徑中的scene.gltf原始材質)
                 child.material.color.set(0xff4500)
@@ -119,7 +119,7 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
 
     const Content = () =>{      
         return  (
-            <group  position={position} scale={[1.3, 1.3, 1.3]} ref={groupRef} onClick={handleClick} onDoubleClick={resetColors} castShadow>
+            <group  position={position} scale={[1.3, 1.3, 1.3]} ref={groupRef} onClick={handleClick} onDoubleClick={resetColors} >
                 {/*壓力計*/}
                 <PressureGauge
                     position={[3.1, 9, 2.9]}

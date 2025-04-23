@@ -92,7 +92,7 @@ export const HoleBox = ({ type, position, args }) => {
                 color={color}
                 map={diffuseMap}           // 基礎顏色
                 displacementMap={displacementMap}
-                displacementScale={0.1}    // 置換高度
+                displacementScale={0}    // 置換高度
                 normalMap={normalMap}      // 法線
                 roughnessMap={roughnessMap}  // 粗糙度
                 roughness={type === "floor_1" ? 0.3 : 0.5}            // 控制粗糙度

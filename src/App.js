@@ -14,7 +14,7 @@ import FireExtinguisher from './Modal/FireExtinguisher';
 import Scales from './Modal/Scale';
 import { Button, Space, Table } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-import { GizmoHelper, GizmoViewport, KeyboardControls, PointerLockControls, View } from '@react-three/drei';
+import { Billboard, GizmoHelper, GizmoViewport, KeyboardControls, PointerLockControls, Text, View } from '@react-three/drei';
 import { useThreeContext } from './Context/threeContext';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Modal/camera/Player';
