@@ -1,6 +1,7 @@
 import { Gltf, useAnimations, useGLTF } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
-import * as THREE from "three"
+import * as THREE from "three";
+import { ColorManagement } from 'three'
 
 export default function TestModle({ position, scale, rotation }) {
     const [s_isOpen, set_s_isOpen] = useState({
@@ -11,6 +12,20 @@ export default function TestModle({ position, scale, rotation }) {
 
     const { animations, materials } = useGLTF("/modal/testModle/box/Cube.gltf")
     const { actions } = useAnimations(animations, modleRef);
+
+    // ColorManagement.enabled = true
+    // ColorManagement.workingColorSpace = 'srgb'
+
+
+
+    // useEffect(() => {
+    //     for (const mat of Object.values(materials)) {
+    //         if (mat.map) {
+    //             mat.map.encoding = 3000 // 或 sRGBEncoding，如果版本允許
+    //             mat.map.needsUpdate = true
+    //         }
+    //     }
+    // }, [materials])
 
     // 處理點擊觸發動畫
     const handleClick = (e) => {
@@ -56,14 +71,7 @@ export default function TestModle({ position, scale, rotation }) {
         console.log("materials:", materials);
     }, [actions])
 
-    // useEffect(() => {
-    //     Object.values(materials).forEach((mat) => {
-    //         if (mat.map) {
-    //             mat.map.encoding = THREE.sRGBEncoding;
-    //             mat.map.needsUpdate = true;
-    //         }
-    //     });
-    // }, [materials]);
+
 
     return (
         <Gltf

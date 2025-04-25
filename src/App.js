@@ -19,6 +19,7 @@ import { useThreeContext } from './Context/threeContext';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Modal/camera/Player';
 import TestModle from './Modal/TestModle';
+import TestBox from './Modal/TestBox';
 
 
 
@@ -265,6 +266,7 @@ export default function ThreeScene() {
               <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
               <TestModle position={[0, 20, 0]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]}/>
+              <TestBox position={[80, 0, 0]}/>
               {/*x軸警示線*/}
               {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
               {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
