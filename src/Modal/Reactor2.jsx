@@ -1,4 +1,4 @@
-import { DragControls, Gltf, Text } from "@react-three/drei";
+import { Billboard, DragControls, Gltf, Text } from "@react-three/drei";
 import PressureGauge from "./PressureGauge";
 import { BallValve1, BallValve2 } from "./BallValve";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -7,9 +7,9 @@ import * as THREE from "three";
 
 
 function Pillar({ position, s_color }) {
-    
+
     useEffect(() => {
-        console.log("s_color:", s_color)
+        // console.log("s_color:", s_color)
     }, [s_color])
 
 
@@ -18,7 +18,7 @@ function Pillar({ position, s_color }) {
             {/* 頂部球體 */}
             <mesh position={[0, 7, 0]}>
                 <sphereGeometry args={[0.8, 64, 32]} />
-                <meshStandardMaterial  color={s_color} />
+                <meshStandardMaterial color={s_color} />
             </mesh>
             {/* 柱子 */}
             <mesh>
@@ -117,9 +117,15 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
 
 
 
-    const Content = () =>{      
-        return  (
-            <group  position={position} scale={[1.3, 1.3, 1.3]} ref={groupRef} onClick={handleClick} onDoubleClick={resetColors} >
+    const Content = () => {
+        return (
+            <group position={position} scale={[1.3, 1.3, 1.3]} ref={groupRef} onClick={handleClick} onDoubleClick={resetColors} >
+                <Billboard>
+                    <Text position={[3, 15, 0]} color="white" fontSize="5.5" strokeColor="black" strokeWidth={0.05}>
+                        {s_data.toFixed(2)}
+                    </Text>
+                </Billboard>
+
                 {/*壓力計*/}
                 <PressureGauge
                     position={[3.1, 9, 2.9]}
@@ -130,21 +136,21 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
                     <cylinderGeometry
                         args={[0.33, 0.33, 1, 64, 64]}
                     />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 {/*port-in*/}
                 <mesh scale={[1, 1, 1]} position={[-1, 9.5, -3]} rotation={[-Math.PI / 9, 0, Math.PI / 30]}>
                     <cylinderGeometry
                         args={[1.5, 1.5, 1.5, 64, 64]}
                     />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 {/*port-view*/}
                 <mesh scale={[1, 1, 1]} position={[-2, 9, 3]} rotation={[Math.PI / 8.5, 0, Math.PI / 18]}>
                     <cylinderGeometry
                         args={[1, 1, 1.5, 64, 64]}
                     />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 {/*port-ball-valve*/}
                 {newBallValve2.map((pos, index) => (
@@ -153,11 +159,11 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
                 {/*反應槽*/}
                 <mesh position={[0, -1, 0]}>
                     <cylinderGeometry args={[7, 7, 13, 64, 64]} />
-                    <meshStandardMaterial side={THREE.DoubleSide} color={s_color}/>
+                    <meshStandardMaterial side={THREE.DoubleSide} color={s_color} />
                 </mesh>
                 <mesh position={[0, 0, 0]}>
                     <cylinderGeometry args={[6, 6, 15, 64, 64]} />
-                    <meshStandardMaterial side={THREE.DoubleSide} color={s_color}/>
+                    <meshStandardMaterial side={THREE.DoubleSide} color={s_color} />
                 </mesh>
                 <mesh>
                     <sphereGeometry args={[10, 32, 16, 0, Math.PI * 2, 0, 0.7]} />
@@ -169,41 +175,41 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
                 </mesh> */}
                 <mesh position={[0, 8, 0]}>
                     <cylinderGeometry args={[6.8, 6.8, 0.5, 64, 64]} />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 <mesh position={[0, 7.4, 0]}>
                     <cylinderGeometry args={[6.8, 6.8, 0.5, 64, 64]} />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 <mesh position={[0, 0.6, 0]} rotation={[Math.PI, 0, 0]}>
                     <sphereGeometry args={[10.8, 32, 16, 0, Math.PI * 2, 0, 0.7]} />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 <mesh position={[0, -7.5, 0]} rotation={[Math.PI / 2, 0, 0]}>
                     <torusGeometry args={[7, 0.3, 16, 100]} />
-                    <meshStandardMaterial color={s_color}/>
+                    <meshStandardMaterial color={s_color} />
                 </mesh>
                 {/*port-output*/}
                 <group position={[0, -9, 0]} scale={[1.2, 1.2, 1.2]}>
                     <mesh>
                         <cylinderGeometry args={[0.5, 0.5, 5, 64, 64]} />
-                        <meshStandardMaterial color={s_color}/>
+                        <meshStandardMaterial color={s_color} />
                     </mesh>
                     <mesh position={[0, -2.5, 0]}>
                         <sphereGeometry args={[0.5, 64, 32]} />
-                        <meshStandardMaterial color={s_color}/>
+                        <meshStandardMaterial color={s_color} />
                     </mesh>
                     <mesh position={[0, -2.855, 0.6]} rotation={[-Math.PI / 3, 0, 0]}>
                         <cylinderGeometry args={[0.5, 0.5, 1.1, 64, 64]} />
-                        <meshStandardMaterial color={s_color}/>
+                        <meshStandardMaterial color={s_color} />
                     </mesh>
                     <BallValve2 position={[0, -3.1, 1]} scale={[0.007, 0.007, 0.007]} rotation={[0, -Math.PI / 2, -Math.PI / 6]} />
-    
+
                 </group>
-    
-    
-    
-    
+
+
+
+
                 {/*角柱*/}
                 {pillarPositions.map((pos, index) => (
                     <Pillar key={index} position={pos} s_color={s_color} />
@@ -223,9 +229,7 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
     }, [groupRef]);
 
     useEffect(() => {
-
-        console.log("s_data:", s_data)
-
+        // console.log("s_data:", s_data)
         if (s_data <= 25) set_s_color("#1e90ff");
         else if (s_data > 25 && s_data <= 50) set_s_color("#ffff00");
         else if (s_data > 50 && s_data <= 75) set_s_color("#ff8c00");
@@ -235,9 +239,9 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
 
     return s_cameraType === "drag" ? (
         <DragControls dragLimits={[undefined, [0, 0], undefined]}>
-            <Content/>
+            <Content />
         </DragControls>
     ) : (
-        <Content/>
+        <Content />
     );
 }
