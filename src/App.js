@@ -14,7 +14,7 @@ import FireExtinguisher from './Modal/FireExtinguisher';
 import Scales from './Modal/Scale';
 import { Button, Space, Table } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
-import { Billboard, GizmoHelper, GizmoViewport, KeyboardControls, PointerLockControls, Text, useHelper, View } from '@react-three/drei';
+import { Billboard, Environment, GizmoHelper, GizmoViewport, KeyboardControls, PointerLockControls, Text, useHelper, View } from '@react-three/drei';
 import { useThreeContext } from './Context/threeContext';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Modal/camera/Player';
@@ -236,14 +236,15 @@ export default function ThreeScene() {
           ]}>
             <Physics gravity={[0, -30, 0]}>
               {/*光源*/}
-              <ambientLight intensity={1.5} />
+              <ambientLight intensity={0.1} />
               <directionalLight
                 castShadow
                 ref={lightRef}
-                intensity={1.5}
+                intensity={0.003}
                 position={[0, 50, 0]}
               />
-              
+              {/*環境貼圖---關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
+              <Environment preset="warehouse"/> 
               {/*建築*/}
               <Box type="wall_marble" position={[10, 45.5, -89.5]} args={[200, 90, 1]} />
               <HoleBox type="wall_marble" position={[-89.5, 45.5, 10]} args={[1, 90, 200]} />
@@ -265,9 +266,7 @@ export default function ThreeScene() {
               <FireExtinguisher position={[65, 5.5, 38]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
               <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
-              <TestModle position={[0, 20, 0]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]}/>
-              <TestBox position={[80, 0, 0]}/>
-              {/*x軸警示線*/}
+              <TestModle position={[-25, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]}/>              {/*x軸警示線*/}
               {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
               {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
               {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28 + 3 * i, 1, 8]} rotation={[0, Math.PI / 4, 0]} />)}

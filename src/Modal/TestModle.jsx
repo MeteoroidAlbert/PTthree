@@ -10,7 +10,7 @@ export default function TestModle({ position, scale, rotation }) {
     })
     const modleRef = useRef();
 
-    const { animations, materials } = useGLTF("/modal/testModle/box/Cube.gltf")
+    const { animations, materials } = useGLTF("/modal/testModle/normal/Sejong Pharmatech_20250424.gltf")
     const { actions } = useAnimations(animations, modleRef);
 
     // ColorManagement.enabled = true
@@ -37,7 +37,7 @@ export default function TestModle({ position, scale, rotation }) {
         if (clickName === "SmallLock") actionName = "SmallLock";
         if (clickName === "TopLock") actionName = "TopLock";
 
-        const action = actions[`${actionName}Action`];
+        const action = actions[`${actionName}_Action`];
 
         if (!action) return;
 
@@ -76,7 +76,7 @@ export default function TestModle({ position, scale, rotation }) {
     return (
         <Gltf
             ref={modleRef}
-            src={"/modal/testModle/box/Cube.gltf"}
+            src={"/modal/testModle/normal/Sejong Pharmatech_20250424.gltf"}
             position={position}
             scale={scale}
             rotation={rotation}
