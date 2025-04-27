@@ -70,18 +70,18 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
         if (!groupRef.current) return;
 
         // 遍歷所有子節點
-        set_s_alarm(true)
-        groupRef.current.traverse((child) => {
-            if (child.isMesh && !(child.type === "TextMesh")) {
+        // set_s_alarm(true)
+        // groupRef.current.traverse((child) => {
+        //     if (child.isMesh && !(child.type === "TextMesh")) {
 
-                child.material = child.material.clone() // 先複製材質 (避免直接修改Gltf src路徑中的scene.gltf原始材質)
-                child.material.color.set(0xff4500)
+        //         child.material = child.material.clone() // 先複製材質 (避免直接修改Gltf src路徑中的scene.gltf原始材質)
+        //         child.material.color.set(0xff4500)
 
-            }
+        //     }
 
 
-            // window.open("/details/Reactor2", "_blank")
-        });
+        //     // window.open("/details/Reactor2", "_blank")
+        // });
 
         onClick && onClick();
 
