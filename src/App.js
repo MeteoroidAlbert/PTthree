@@ -236,24 +236,12 @@ export default function ThreeScene() {
           <View.Port />
         </Canvas>
       </div>
-      {/*DOM節點*/}
-      {/* {s_isShowing_mixer && (
-        <div className="absolute top-[35%] left-[50%] z-[100] bg-white p-2  overflow-x-auto">
-          <Table columns={tableColumns_mixer} dataSource={fakeData_mixer} />
-        </div>
-      )} */}
       {s_isDialogueShowing && (
         <div className="absolute top-[5%] left-[5%] z-[100] bg-white p-2">
           <p>F 開啟面板</p>
 
         </div>
       )}
-      {/* {s_showData && (
-        <div className="absolute top-[35%] left-[50%] z-[100] bg-white p-2  overflow-x-auto">
-          <Table columns={tableColumns_mixer} dataSource={fakeData_mixer} />
-        </div>
-      )} */}
-
 
       <Drawer
         placement="bottom"
