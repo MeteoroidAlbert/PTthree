@@ -88,10 +88,10 @@ export default function ThreeScene() {
     s_isDialogueShowing, s_interactObj,
     s_selectedObj_view2, set_s_selectedObj_view2,
     s_visible_view2, set_s_visible_view2,
-    Component_view2, setComponent_view2,
+    ComponentView2, setComponentView2,
     s_selectedObj_view3, set_s_selectedObj_view3,
     s_visible_view3, set_s_visible_view3,
-    Component_view3, setComponent_view3,
+    ComponentView3, setComponentView3,
   } = useThreeContext();
 
 
@@ -190,7 +190,7 @@ export default function ThreeScene() {
 
 
   useEffect(() => {
-    setComponent_view2(undefined)
+    setComponentView2(undefined)
   }, [s_cameraType])
 
 
@@ -278,7 +278,7 @@ export default function ThreeScene() {
               {Array.from({ length: 6 }).map((x, i) => <CautionTape position={[61.5, 1, 23 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
               {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28.5, 1.1, 38 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
               {/*相機*/}
-              {s_cameraType === "third" && (
+              {(s_cameraType === "third" || s_cameraType === "drag") && (
                 <ThirdPersonController
                   cameraPosition={s_cameraPosition}
                   orbitTarget={s_orbitTarget}
@@ -312,12 +312,12 @@ export default function ThreeScene() {
           </KeyboardControls>
         </View>
 
-        {(Component_view2 && s_cameraType === "third") && (
+        {(ComponentView2 && s_cameraType === "third") && (
           <View key="view2" index={2} className={`absolute top-0 left-0 w-[40%] h-full transition-transform duration-500 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}>
 
             <Physics gravity={[0, -30, 0]}>
               <color attach="background" args={['#d6edf3']} />
-              <Component_view2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
+              <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
               <ambientLight intensity={1.5} />
               <directionalLight position={[10, 100, 10]} />
               <ThirdPersonController
@@ -329,12 +329,12 @@ export default function ThreeScene() {
           </View>
         )}
 
-        {(Component_view3 && s_cameraType === "third") && (
+        {(ComponentView3 && s_cameraType === "third") && (
           <View key="view3" index={3} className={`absolute top-16 right-5 w-[40%] h-[40%] transition-transform duration-500 ease-in-out ${s_visible_view3 ? "translate-y-0" : "-translate-y-full"}`}>
 
             <Physics gravity={[0, -30, 0]}>
               <color attach="background" args={['#eef39d']} />
-              <Component_view3 clickable_view1={false} position={[0, 0, 0]} />
+              <ComponentView3 clickable_view1={false} position={[0, 0, 0]} />
               <ambientLight intensity={1.5} />
               <directionalLight position={[10, 100, 10]} />
               <ThirdPersonController
@@ -373,7 +373,7 @@ export default function ThreeScene() {
         <CloseOutlined
           className={`absolute top-2 left-2 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}
           onClick={() => {
-            setComponent_view2(undefined);
+            setComponentView2(undefined);
             set_s_selectedObj_view2(undefined);
             set_s_islocking(false);
             set_s_isShowing_reactor(false);
@@ -385,7 +385,7 @@ export default function ThreeScene() {
         <CloseOutlined
           className={`absolute top-[72px] right-7 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view3 ? "translate-y-0" : "-translate-y-full"}`}
           onClick={() => {
-            setComponent_view3(undefined);
+            setComponentView3(undefined);
             set_s_selectedObj_view3(undefined);
           }}
         />

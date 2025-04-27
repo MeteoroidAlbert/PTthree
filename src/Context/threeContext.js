@@ -10,19 +10,19 @@ export const ThreeProvider = ({ children }) => {
     const [s_interactObj, set_s_interactObj] = useState(undefined);  // -----------------> 物理引擎交互物件
     const [s_selectedObj_view2, set_s_selectedObj_view2] = useState(undefined) // -------> View2選中物件
     const [s_visible_view2, set_s_visible_view2] = useState(false);  // -----------------> View2子畫布顯示
-    const [Component_view2, setComponent_view2] = useState(undefined); // ---------------> View2渲染元件
+    const [ComponentView2, setComponentView2] = useState(undefined); // ---------------> View2渲染元件
     const [s_selectedObj_view3, set_s_selectedObj_view3] = useState(undefined) // -------> View3選中物件
     const [s_visible_view3, set_s_visible_view3] = useState(false);  // -----------------> View3子畫布顯示
-    const [Component_view3, setComponent_view3] = useState(undefined); // ---------------> View3渲染元件
+    const [ComponentView3, setComponentView3] = useState(undefined); // ---------------> View3渲染元件
 
     // 設定View2渲染元件
     useEffect(() => {
-        setComponent_view2(() => componentMap[s_selectedObj_view2] || null);
+        setComponentView2(() => componentMap[s_selectedObj_view2] || null);
     }, [s_selectedObj_view2]);
 
     // 延遲visible = true(hint: 使View2可以表現出Drawer行為)
     useEffect(() => {
-        if (Component_view2 && s_cameraType === "third") {
+        if (ComponentView2 && s_cameraType === "third") {
             setTimeout(() => {
                 set_s_visible_view2(true);
             }, 100)
@@ -31,16 +31,16 @@ export const ThreeProvider = ({ children }) => {
         else {
             set_s_visible_view2(false);
         }
-    }, [Component_view2])
+    }, [ComponentView2])
 
     // 設定View3渲染元件
     useEffect(() => {
-        setComponent_view3(() => componentMap[s_selectedObj_view3] || null);
+        setComponentView3(() => componentMap[s_selectedObj_view3] || null);
     }, [s_selectedObj_view3]);
 
     // 延遲visible = true(hint: 使View3可以表現出Drawer行為)
     useEffect(() => {
-        if (Component_view3 && s_cameraType === "third") {
+        if (ComponentView3 && s_cameraType === "third") {
             setTimeout(() => {
                 set_s_visible_view3(true);
             }, 100)
@@ -49,7 +49,7 @@ export const ThreeProvider = ({ children }) => {
         else {
             set_s_visible_view3(false);
         }
-    }, [Component_view3])
+    }, [ComponentView3])
 
 
     return (
@@ -60,10 +60,10 @@ export const ThreeProvider = ({ children }) => {
             s_interactObj, set_s_interactObj,
             s_selectedObj_view2, set_s_selectedObj_view2,
             s_visible_view2, set_s_visible_view2,
-            Component_view2, setComponent_view2,
+            ComponentView2, setComponentView2,
             s_selectedObj_view3, set_s_selectedObj_view3,
             s_visible_view3, set_s_visible_view3,
-            Component_view3, setComponent_view3,
+            ComponentView3, setComponentView3,
         }}>
             {children}
         </ThreeContext.Provider>
