@@ -24,202 +24,202 @@ import TestBox from './Modal/TestBox';
 
 
 const tableColumns_mixer = [
-  {
-    title: "TEST1",
-    dataIndex: "test1",
-    width: 120,
-  },
-  {
-    title: "TEST2",
-    dataIndex: "test2",
-    width: 120,
-  },
-  {
-    title: "TEST3",
-    dataIndex: "test3",
-    width: 120,
-  },
-  {
-    title: "TEST4",
-    dataIndex: "test4",
-    width: 120,
-  },
-  {
-    title: "TEST5",
-    dataIndex: "test5",
-    width: 120,
-  }
+    {
+        title: "TEST1",
+        dataIndex: "test1",
+        width: 120,
+    },
+    {
+        title: "TEST2",
+        dataIndex: "test2",
+        width: 120,
+    },
+    {
+        title: "TEST3",
+        dataIndex: "test3",
+        width: 120,
+    },
+    {
+        title: "TEST4",
+        dataIndex: "test4",
+        width: 120,
+    },
+    {
+        title: "TEST5",
+        dataIndex: "test5",
+        width: 120,
+    }
 ]
 
 const fakeData_mixer = [
-  {
-    test1: "1",
-    test2: "2",
-    test3: "3",
-    test4: "4",
-    test5: "5",
-  }
+    {
+        test1: "1",
+        test2: "2",
+        test3: "3",
+        test4: "4",
+        test5: "5",
+    }
 ]
 
 
 
 const positionTarget = {
-  default: [[80, 120, 60], []], // 0: cameraPosition, 1: orbitTarget
-  Reactor1: [[0, 20, -20], [-20, 20, -20]],
-  Mixer: [[60, 5, -50], [60, 5, -70]]
+    default: [[80, 120, 60], []], // 0: cameraPosition, 1: orbitTarget
+    Reactor1: [[0, 20, -20], [-20, 20, -20]],
+    Mixer: [[60, 5, -50], [60, 5, -70]]
 };
 
-export default function Scene1() {
-  const [s_isShowing_reactor, set_s_isShowing_reactor] = useState(false);  // Panel_ractor顯示與否
-  const [s_isShowing_mixer, set_s_isShowing_mixer] = useState(false);      // Panel_mixer顯示與否
-  const [s_islocking, set_s_islocking] = useState(false);                  // 視角鎖定與否
-  const [s_cameraPosition, set_s_cameraPosition] = useState(               // 相機位置與目標
-    new THREE.Vector3(...positionTarget.default[0])
-  );
-  const [s_orbitTarget, set_s_orbitTarget] = useState(
-    new THREE.Vector3(...positionTarget.default[1])
-  );
+export default function SceneOne() {
+    const [s_isShowing_reactor, set_s_isShowing_reactor] = useState(false);  // Panel_ractor顯示與否
+    const [s_isShowing_mixer, set_s_isShowing_mixer] = useState(false);      // Panel_mixer顯示與否
+    const [s_islocking, set_s_islocking] = useState(false);                  // 視角鎖定與否
+    const [s_cameraPosition, set_s_cameraPosition] = useState(               // 相機位置與目標
+        new THREE.Vector3(...positionTarget.default[0])
+    );
+    const [s_orbitTarget, set_s_orbitTarget] = useState(
+        new THREE.Vector3(...positionTarget.default[1])
+    );
 
-  const [s_showData, set_s_showData] = useState(false);
-  const [s_data, set_s_data] = useState(undefined);  // 存取後端資料
+    const [s_showData, set_s_showData] = useState(false);
+    const [s_data, set_s_data] = useState(undefined);  // 存取後端資料
 
-  const {
-    s_cameraType, set_s_cameraType,
-    s_isDialogueShowing, s_interactObj,
-    s_selectedObj_view2, set_s_selectedObj_view2,
-    s_visible_view2, set_s_visible_view2,
-    ComponentView2, setComponentView2,
-    s_selectedObj_view3, set_s_selectedObj_view3,
-    s_visible_view3, set_s_visible_view3,
-    ComponentView3, setComponentView3,
-  } = useThreeContext();
+    const {
+        s_cameraType, set_s_cameraType,
+        s_isDialogueShowing, s_interactObj,
+        s_selectedObj_view2, set_s_selectedObj_view2,
+        s_visible_view2, set_s_visible_view2,
+        ComponentView2, setComponentView2,
+        s_selectedObj_view3, set_s_selectedObj_view3,
+        s_visible_view3, set_s_visible_view3,
+        ComponentView3, setComponentView3,
+    } = useThreeContext();
 
-  const {camera} = useThree();
+    const { camera } = useThree();
 
-  const ref = useRef();
-  const lightRef = useRef();
-
-
-
-
-  const handlePanelShowing = (type) => {
-    set_s_islocking(prevState => !prevState);
-    set_s_selectedObj_view2(prev => prev === type ? undefined : type);
-    type === "Reactor1" && set_s_isShowing_reactor(prev => !prev);
-    type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
-  };
-
-
-  // 調整相機目標、位置
-  useEffect(() => {
-    if (s_islocking && s_selectedObj_view2) {
-      set_s_cameraPosition(new THREE.Vector3(...positionTarget[s_selectedObj_view2][0]));
-      set_s_orbitTarget(new THREE.Vector3(...positionTarget[s_selectedObj_view2][1]));
-    }
-    else {
-      set_s_cameraPosition(new THREE.Vector3(...positionTarget.default[0]));
-      set_s_orbitTarget(new THREE.Vector3(...positionTarget.default[1]));
-    }
-  }, [s_islocking, s_selectedObj_view2]);
-
-
-  useEffect(() => {
-    setComponentView2(undefined)
-  }, [s_cameraType])
+    const ref = useRef();
+    const lightRef = useRef();
 
 
 
 
+    const handlePanelShowing = (type) => {
+        set_s_islocking(prevState => !prevState);
+        set_s_selectedObj_view2(prev => prev === type ? undefined : type);
+        type === "Reactor1" && set_s_isShowing_reactor(prev => !prev);
+        type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
+    };
 
-  return (
-    
-      <>
-        
-          <KeyboardControls map={[
-            { name: "forward", keys: ["ArrowUp", "w", "W"] },
-            { name: "backward", keys: ["ArrowDown", "s", "S"] },
-            { name: "left", keys: ["ArrowLeft", "a", "A"] },
-            { name: "right", keys: ["ArrowRight", "d", "D"] },
-            { name: "jump", keys: ["Space"] },
-          ]}>
-            <Physics gravity={[0, -30, 0]}>
-              {/*光源*/}
-              <ambientLight intensity={0.1} />
-              <directionalLight
-                castShadow
-                ref={lightRef}
-                intensity={0.003}
-                position={[0, 50, 0]}
-              />
-              {/*環境貼圖---關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
-              <Environment preset="warehouse" />
-              {/*建築*/}
-              <Box type="wall_marble" position={[10, 45.5, -89.5]} args={[200, 90, 1]} />
-              <HoleBox type="wall_marble" position={[-89.5, 45.5, 10]} args={[1, 90, 200]} />
-              <Box type="floor_1" position={[10, 0, 10]} args={[200, 1, 200]} />
-              <Box type="wall_marble" position={[55, 45.5, 35]} args={[15, 90, 15]} />
-              {/*3D物件*/}
-              <Reactor1
-                position={[-50, -6, -20]}
-                scale={[8, 8, 8]}
-                rotation={[0, Math.PI * 1.5, 0]}
-                onClick={() => handlePanelShowing("Reactor1")}
-              />
-              <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
-              <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
-              <Mixer position={[50, 0.55, -70]} rotation={[0, -Math.PI / 2, 0]} onClick={() => handlePanelShowing("Mixer")} />
-              <Pallet position={[0, 0, 100]} scale={[12, 12, 12]} />
-              <PalletTruck position={[26.5, 0, 50]} scale={[12, 12, 12]} rotation={[0, Math.PI, 0]} />
-              <FireExtinguisher position={[65, 5.5, 33]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
-              <FireExtinguisher position={[65, 5.5, 38]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
-              <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
-              <TestModle position={[-25, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />              {/*x軸警示線*/}
-              {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
-              {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
-              {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28 + 3 * i, 1, 8]} rotation={[0, Math.PI / 4, 0]} />)}
-              {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28 + 3 * i, 1, 42]} rotation={[0, Math.PI / 4, 0]} />)}
-              {/*z軸警示線*/}
-              {Array.from({ length: 31 }).map((x, i) => <CautionTape position={[-24.3, 1, -51 + 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
-              {Array.from({ length: 13 }).map((x, i) => <CautionTape position={[60, 1, -90 + 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
-              {Array.from({ length: 6 }).map((x, i) => <CautionTape position={[61.5, 1, 23 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
-              {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28.5, 1.1, 38 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
-              {/*相機*/}
-              {(s_cameraType === "third" || s_cameraType === "drag") && (
-                <ThirdPersonController
-                  cameraPosition={s_cameraPosition}
-                  orbitTarget={s_orbitTarget}
-                  s_islocking={s_islocking}
-                  set_s_orbitTarget={set_s_orbitTarget}
-                />
-              )}
+    // 調整相機目標、位置
+    useEffect(() => {
+        if (s_islocking && s_selectedObj_view2) {
+            set_s_cameraPosition(new THREE.Vector3(...positionTarget[s_selectedObj_view2][0]));
+            set_s_orbitTarget(new THREE.Vector3(...positionTarget[s_selectedObj_view2][1]));
+        }
+        else {
+            set_s_cameraPosition(new THREE.Vector3(...positionTarget.default[0]));
+            set_s_orbitTarget(new THREE.Vector3(...positionTarget.default[1]));
+        }
+    }, [s_islocking, s_selectedObj_view2]);
 
-              {s_cameraType === "first" && (
-                <>
-                  <PointerLockControls />
-                  <Player />
-                </>
-              )}
 
-              {/*2D介面*/}
-              {s_isShowing_reactor && <DataTableReactor />}
-              {s_isShowing_mixer && <DataTableMixer />}
-              {/*坐標軸*/}
-              <primitive object={new THREE.AxesHelper(1000)} />
-              <GizmoHelper
-                alignment="bottom-right" // 在畫布上的位置
-                margin={[80, 80]} // 距離畫布邊緣
-              >
-                <GizmoViewport
-                  axisColors={['red', 'green', 'blue']}
-                  labelColor="white"
-                />
-              </GizmoHelper>
-            </Physics>
-          </KeyboardControls>
-        
+    useEffect(() => {
+        setComponentView2(undefined)
+    }, [s_cameraType])
 
-        {/* {(ComponentView2 && s_cameraType === "third") && (
+
+
+
+
+    return (
+
+        <View key="view1" index={1} className="absolute w-full h-full">
+
+            <KeyboardControls map={[
+                { name: "forward", keys: ["ArrowUp", "w", "W"] },
+                { name: "backward", keys: ["ArrowDown", "s", "S"] },
+                { name: "left", keys: ["ArrowLeft", "a", "A"] },
+                { name: "right", keys: ["ArrowRight", "d", "D"] },
+                { name: "jump", keys: ["Space"] },
+            ]}>
+                <Physics gravity={[0, -30, 0]}>
+                    {/*光源*/}
+                    <ambientLight intensity={0.1} />
+                    <directionalLight
+                        castShadow
+                        ref={lightRef}
+                        intensity={0.003}
+                        position={[0, 50, 0]}
+                    />
+                    {/*環境貼圖---關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
+                    <Environment preset="warehouse" />
+                    {/*建築*/}
+                    <Box type="wall_marble" position={[10, 45.5, -89.5]} args={[200, 90, 1]} />
+                    <HoleBox type="wall_marble" position={[-89.5, 45.5, 10]} args={[1, 90, 200]} />
+                    <Box type="floor_1" position={[10, 0, 10]} args={[200, 1, 200]} />
+                    <Box type="wall_marble" position={[55, 45.5, 35]} args={[15, 90, 15]} />
+                    {/*3D物件*/}
+                    <Reactor1
+                        position={[-50, -6, -20]}
+                        scale={[8, 8, 8]}
+                        rotation={[0, Math.PI * 1.5, 0]}
+                        onClick={() => handlePanelShowing("Reactor1")}
+                    />
+                    <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
+                    <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
+                    <Mixer position={[50, 0.55, -70]} rotation={[0, -Math.PI / 2, 0]} onClick={() => handlePanelShowing("Mixer")} />
+                    <Pallet position={[0, 0, 100]} scale={[12, 12, 12]} />
+                    <PalletTruck position={[26.5, 0, 50]} scale={[12, 12, 12]} rotation={[0, Math.PI, 0]} />
+                    <FireExtinguisher position={[65, 5.5, 33]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
+                    <FireExtinguisher position={[65, 5.5, 38]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
+                    <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
+
+                    <TestModle position={[-25, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />              {/*x軸警示線*/}
+                    {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28 + 3 * i, 1, 8]} rotation={[0, Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28 + 3 * i, 1, 42]} rotation={[0, Math.PI / 4, 0]} />)}
+                    {/*z軸警示線*/}
+                    {Array.from({ length: 31 }).map((x, i) => <CautionTape position={[-24.3, 1, -51 + 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 13 }).map((x, i) => <CautionTape position={[60, 1, -90 + 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 6 }).map((x, i) => <CautionTape position={[61.5, 1, 23 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
+                    {Array.from({ length: 11 }).map((x, i) => <CautionTape position={[28.5, 1.1, 38 - 3 * i]} rotation={[0, -Math.PI / 4, 0]} />)}
+                    {/*相機*/}
+                    {(s_cameraType === "third" || s_cameraType === "drag") && (
+                        <ThirdPersonController
+                            cameraPosition={s_cameraPosition}
+                            orbitTarget={s_orbitTarget}
+                            s_islocking={s_islocking}
+                            set_s_orbitTarget={set_s_orbitTarget}
+                        />
+                    )}
+
+                    {s_cameraType === "first" && (
+                        <>
+                            <PointerLockControls />
+                            <Player />
+                        </>
+                    )}
+
+                    {/*2D介面*/}
+                    {s_isShowing_reactor && <DataTableReactor />}
+                    {s_isShowing_mixer && <DataTableMixer />}
+                    {/*坐標軸*/}
+                    <primitive object={new THREE.AxesHelper(1000)} />
+                    <GizmoHelper
+                        alignment="bottom-right" // 在畫布上的位置
+                        margin={[80, 80]} // 距離畫布邊緣
+                    >
+                        <GizmoViewport
+                            axisColors={['red', 'green', 'blue']}
+                            labelColor="white"
+                        />
+                    </GizmoHelper>
+                </Physics>
+            </KeyboardControls>
+
+
+            {/* {(ComponentView2 && s_cameraType === "third") && (
           <View key="view2" index={2} className={`absolute top-0 left-0 w-[40%] h-full transition-transform duration-500 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}>
 
             <Physics gravity={[0, -30, 0]}>
@@ -274,7 +274,7 @@ export default function Scene1() {
           }}
         />
       )} */}
-      </>
+        </View>
 
-  );
+    );
 }

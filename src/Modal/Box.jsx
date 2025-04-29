@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Geometry, Base, Addition, Subtraction, ReverseSubtraction, Intersection, Difference } from '@react-three/csg'
 import Fan from './Fan';
 import { RigidBody } from '@react-three/rapier';
+import { useGLTF } from '@react-three/drei';
 
 const textures = {
     floor_1: [
@@ -37,6 +38,8 @@ const textures = {
         "/image/textures/wall/marble/king_white_marble-2K/king_white_-_polished_-_marble-specular-2K.png",
     ]
 }
+
+
 
 export const Box = ({ type, position, args }) => {
 

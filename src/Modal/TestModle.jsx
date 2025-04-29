@@ -2,6 +2,7 @@ import { Gltf, useAnimations, useGLTF } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from "three";
 import { ColorManagement } from 'three'
+import { objectGroup } from 'three/src/nodes/TSL.js';
 
 export default function TestModle({ position, scale, rotation }) {
     const [s_isOpen, set_s_isOpen] = useState({
@@ -10,7 +11,7 @@ export default function TestModle({ position, scale, rotation }) {
     })
     const modleRef = useRef();
 
-    const { animations, materials } = useGLTF("/modal/testModle/normal/Sejong Pharmatech_20250424.gltf")
+    const { animations, materials, scene } = useGLTF("/modal/testModle/normal/Sejong Pharmatech_20250424.gltf")
     const { actions } = useAnimations(animations, modleRef);
 
     // ColorManagement.enabled = true
@@ -69,6 +70,7 @@ export default function TestModle({ position, scale, rotation }) {
         console.log("actions:", actions);
         console.log("animation:", animations)
         console.log("materials:", materials);
+        console.log("object3D:", scene);
     }, [actions])
 
 

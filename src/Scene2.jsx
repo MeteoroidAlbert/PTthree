@@ -69,7 +69,7 @@ const positionTarget = {
   Mixer: [[60, 5, -50], [60, 5, -70]]
 };
 
-export default function Scene1() {
+export default function Scene2() {
   const [s_isShowing_reactor, set_s_isShowing_reactor] = useState(false);  // Panel_ractor顯示與否
   const [s_isShowing_mixer, set_s_isShowing_mixer] = useState(false);      // Panel_mixer顯示與否
   const [s_islocking, set_s_islocking] = useState(false);                  // 視角鎖定與否
@@ -94,7 +94,7 @@ export default function Scene1() {
     ComponentView3, setComponentView3,
   } = useThreeContext();
 
-  const {camera} = useThree();
+  const { camera } = useThree();
 
   const ref = useRef();
   const lightRef = useRef();
@@ -132,38 +132,21 @@ export default function Scene1() {
 
 
   return (
-    
-      <>
-        {(ComponentView2 && s_cameraType === "third") && (
-          <View key="view2" index={2} className={`absolute top-0 left-0 w-[40%] h-full transition-transform duration-500 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}>
 
-            <Physics gravity={[0, -30, 0]}>
-              <color attach="background" args={['#d6edf3']} />
-              <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
-              <ambientLight intensity={1.5} />
-              <directionalLight position={[10, 100, 10]} />
-              <ThirdPersonController
-                cameraPosition={new THREE.Vector3(25, 25, 25)}
-                orbitTarget={new THREE.Vector3(0, 1, 0)}
-              />
-            </Physics>
 
-          </View>
-        )}
+    <>
+      <color attach="background" args={['#d6edf3']} />
+      <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[10, 100, 10]} />
+      <ThirdPersonController
+        cameraPosition={new THREE.Vector3(25, 25, 25)}
+        orbitTarget={new THREE.Vector3(0, 1, 0)}
+      />
+    </>
 
-        {s_visible_view2 && (
-        <CloseOutlined
-          className={`absolute top-2 left-2 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}
-          onClick={() => {
-            setComponentView2(undefined);
-            set_s_selectedObj_view2(undefined);
-            set_s_islocking(false);
-            set_s_isShowing_reactor(false);
-            set_s_isShowing_mixer(false);
-          }}
-        />
-      )}
-      </>
+
+
 
   );
 }

@@ -17,6 +17,7 @@ export const ThreeProvider = ({ children }) => {
 
     // 設定View2渲染元件
     useEffect(() => {
+        console.log("s_selectedObj_view2:", s_selectedObj_view2)
         setComponentView2(() => componentMap[s_selectedObj_view2] || null);
     }, [s_selectedObj_view2]);
 

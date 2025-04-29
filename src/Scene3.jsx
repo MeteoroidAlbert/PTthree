@@ -69,7 +69,7 @@ const positionTarget = {
   Mixer: [[60, 5, -50], [60, 5, -70]]
 };
 
-export default function Scene1() {
+export default function Scene3() {
   const [s_isShowing_reactor, set_s_isShowing_reactor] = useState(false);  // Panel_ractor顯示與否
   const [s_isShowing_mixer, set_s_isShowing_mixer] = useState(false);      // Panel_mixer顯示與否
   const [s_islocking, set_s_islocking] = useState(false);                  // 視角鎖定與否
@@ -151,15 +151,7 @@ export default function Scene1() {
           </View>
         )}
 
-      {s_visible_view3 && (
-        <CloseOutlined
-          className={`absolute top-[72px] right-7 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view3 ? "translate-y-0" : "-translate-y-full"}`}
-          onClick={() => {
-            setComponentView3(undefined);
-            set_s_selectedObj_view3(undefined);
-          }}
-        />
-      )}
+      
       </>
 
   );
