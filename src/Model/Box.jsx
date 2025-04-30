@@ -54,7 +54,7 @@ export const Box = ({ type, position, args }) => {
 
     return (
         <RigidBody type="fixed" >
-        <mesh position={position} castShadow>
+        <mesh position={position} castShadow >
             <boxGeometry args={args} />
             <meshStandardMaterial
                 color={color}
@@ -64,6 +64,7 @@ export const Box = ({ type, position, args }) => {
                 normalMap={normalMap}      // 法線
                 roughnessMap={roughnessMap}  // 粗糙度
                 roughness={type === "floor_1" ? 0.3 : 0.5}     // 控制粗糙度
+                side={THREE.DoubleSide}
             />
         </mesh>
         </RigidBody>

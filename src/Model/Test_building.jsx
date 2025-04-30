@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function TestBuilding({ position, scale, rotation }) {
     const modleRef = useRef();
 
-    const { animations, materials, scene } = useGLTF("/modal/testModle/building/BuildingAll.gltf")
+    const { animations, materials, scene } = useGLTF("/modal/testModle/building/buildingAll/Building All.gltf")
     const { actions } = useAnimations(animations, modleRef);
 
     const handleClick = () => {
@@ -34,7 +34,7 @@ export default function TestBuilding({ position, scale, rotation }) {
     return (
         <Gltf
             ref={modleRef}
-            src={"/modal/testModle/building/BuildingAll.gltf"}
+            src={"/modal/testModle/building/buildingAll/Building All.gltf"}
             position={position}
             scale={scale}
             rotation={rotation}

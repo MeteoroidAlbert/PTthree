@@ -57,7 +57,7 @@ function NewBallValve2({ position, rotation, clickable_view2 }) {
     )
 }
 
-export default function Reactor2({ position, onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
+export default function Reactor2({ position=[0, 0, 0], onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
     const [s_alarm, set_s_alarm] = useState(false);
     const [s_color, set_s_color] = useState("#1e90ff");
     const { s_cameraType } = useThreeContext();

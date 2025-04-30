@@ -10,14 +10,18 @@ export const ThreeProvider = ({ children }) => {
     const [s_interactObj, set_s_interactObj] = useState(undefined);  // -----------------> 物理引擎交互物件
     const [s_selectedObj_view2, set_s_selectedObj_view2] = useState(undefined) // -------> View2選中物件
     const [s_visible_view2, set_s_visible_view2] = useState(false);  // -----------------> View2子畫布顯示
-    const [ComponentView2, setComponentView2] = useState(undefined); // ---------------> View2渲染元件
+    const [ComponentView2, setComponentView2] = useState(undefined); // -----------------> View2渲染元件
     const [s_selectedObj_view3, set_s_selectedObj_view3] = useState(undefined) // -------> View3選中物件
     const [s_visible_view3, set_s_visible_view3] = useState(false);  // -----------------> View3子畫布顯示
-    const [ComponentView3, setComponentView3] = useState(undefined); // ---------------> View3渲染元件
+    const [ComponentView3, setComponentView3] = useState(undefined); // -----------------> View3渲染元件
+    const [s_draggingObj, set_s_draggingObj] = useState(undefined);
+    const [s_view1Component, set_s_view1Component] = useState([]);
+    const [s_screenPos, set_s_screenPos] = useState({}); // -----------------------------> 存取屏幕座標
+
 
     // 設定View2渲染元件
     useEffect(() => {
-        console.log("s_selectedObj_view2:", s_selectedObj_view2)
+        console.log("s_selectedObj_view2:", s_selectedObj_view2);
         setComponentView2(() => componentMap[s_selectedObj_view2] || null);
     }, [s_selectedObj_view2]);
 
@@ -65,6 +69,9 @@ export const ThreeProvider = ({ children }) => {
             s_selectedObj_view3, set_s_selectedObj_view3,
             s_visible_view3, set_s_visible_view3,
             ComponentView3, setComponentView3,
+            s_draggingObj, set_s_draggingObj,
+            s_view1Component, set_s_view1Component,
+            s_screenPos, set_s_screenPos,
         }}>
             {children}
         </ThreeContext.Provider>

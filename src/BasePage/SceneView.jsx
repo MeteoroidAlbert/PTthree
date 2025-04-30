@@ -1,25 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { Environment, GizmoHelper, GizmoViewport, Html, KeyboardControls, OrbitControls, PointerLockControls, Text, useHelper, View } from '@react-three/drei';
-import Reactor1 from '../Modle/Reactor1';
-import Reactor2 from '../Modle/Reactor2';
-import ThirdPersonController from '../Modle/camera/ThirdPersonController';
-import Mixer from '../Modle/Mixer';
-import Pallet from '../Modle/Pallet';
+import Reactor1 from '../Model/Reactor1';
+import Reactor2 from '../Model/Reactor2';
+import ThirdPersonController from '../Model/camera/ThirdPersonController';
+import Mixer from '../Model/Mixer';
+import Pallet from '../Model/Pallet';
 import { DataTableMixer, DataTableReactor } from '../Component/DataTable';
-import PalletTruck from '../Modle/PalletTruck';
-import CautionTape from '../Modle/CautionTape';
-import FireExtinguisher from '../Modle/FireExtinguisher';
-import Scales from '../Modle/Scale';
+import PalletTruck from '../Model/PalletTruck';
+import CautionTape from '../Model/CautionTape';
+import FireExtinguisher from '../Model/FireExtinguisher';
+import Scales from '../Model/Scale';
 import { useThreeContext } from '../Context/threeContext';
 import { Physics } from '@react-three/rapier';
-import { Player } from '../Modle/camera/Player';
-import TestModle from '../Modle/Test_Modle';
+import { Player } from '../Model/camera/Player';
+import TestModle from '../Model/Test_Modle';
 import { useThree } from "@react-three/fiber";
-import { Box, HoleBox } from "../Modle/Box";
+import { Box, HoleBox } from "../Model/Box";
 import { Button } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
-import TestBuilding from "../Modle/Test_building";
+import TestBuilding from "../Model/Test_building";
+import { componentMap } from "../util";
+
 
 //相機位置與目標-----------------------------------------------------------> 0: cameraPosition, 1: orbitTarget
 const positionTarget = {
@@ -30,14 +32,14 @@ const positionTarget = {
 
 export default function SceneViews({ s_data }) {
     const {
-        s_cameraType, 
+        s_cameraType,
         set_s_selectedObj_view2,
-        s_visible_view2, 
-        ComponentView2, 
-        setComponentView2, 
+        s_visible_view2,
+        ComponentView2,
+        setComponentView2,
         set_s_selectedObj_view3,
-        s_visible_view3, 
-        ComponentView3, 
+        s_visible_view3,
+        ComponentView3,
         setComponentView3,
     } = useThreeContext();
 
@@ -45,6 +47,7 @@ export default function SceneViews({ s_data }) {
         <>
             <View key="view1" index={1} className="absolute w-full h-full">
                 <ViewContent1 s_data={s_data} />
+                {/* <ViewContent4/> */}
             </View>
             {(ComponentView2 && s_cameraType === "third") && (
                 <View
@@ -99,13 +102,19 @@ function ViewContent1({ s_data }) {
         new THREE.Vector3(...positionTarget.default[1])
     );
 
+    const { camera } = useThree(); //----------------------------------------------->拿取當前View內的camera
 
-    const { camera, size } = useThree();
 
     const {
-        s_cameraType, set_s_cameraType,
-        s_selectedObj_view2, set_s_selectedObj_view2,
-        setComponentView2, setComponentView3
+        s_cameraType,
+        s_selectedObj_view2,
+        set_s_selectedObj_view2,
+        setComponentView2,
+        setComponentView3,
+        s_screenPos,
+        s_view1Component,
+        set_s_view1Component,
+        s_draggingObj
     } = useThreeContext();
 
     const handlePanelShowing = (type) => {
@@ -114,6 +123,24 @@ function ViewContent1({ s_data }) {
         type === "Reactor1" && set_s_isShowing_reactor(prev => !prev);
         type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
     };
+
+    function screenToWorld(screenX, screenY, camera) {
+        const mouse = new THREE.Vector2(
+            (screenX / window.innerWidth) * 2 - 1,
+            -(screenY / window.innerHeight) * 2 + 1
+        );
+
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+
+        // Y=0 地面平面
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+        const intersectPoint = new THREE.Vector3();
+        raycaster.ray.intersectPlane(plane, intersectPoint);
+
+        return intersectPoint; // 包含 x, y, z（其中 y 會是 0）
+    }
 
     // 調整相機目標、位置
     useEffect(() => {
@@ -131,6 +158,26 @@ function ViewContent1({ s_data }) {
         setComponentView2(undefined);
         setComponentView3(undefined);
     }, [s_cameraType])
+
+    useEffect(() => {
+        // console.log("s_screenPos:", s_screenPos);
+        const { x, y } = s_screenPos;
+        console.log(screenToWorld(x, y, camera));
+        if (s_draggingObj) {
+            set_s_view1Component(prev => [...prev, {
+                name: s_draggingObj,
+                props: {
+                    position: screenToWorld(x, y, camera)
+                }
+            }])
+        }
+
+
+    }, [s_screenPos])
+
+    useEffect(() => {
+        console.log("s_view1Component:", s_view1Component)
+    }, [s_view1Component])
 
     return (
         <KeyboardControls map={[
@@ -171,7 +218,9 @@ function ViewContent1({ s_data }) {
                 <FireExtinguisher position={[65, 5.5, 38]} scale={[5, 5, 5]} rotation={[0, Math.PI / 2, 0]} />
                 <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
-                <TestModle position={[-25, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
+                <TestModle position={[80, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
+
+                {s_view1Component.length > 0 && s_view1Component.map((x, i) => React.createElement(componentMap[x.name], { key: i, ...x.props }))}
                 {/*x軸警示線*/}
                 {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
                 {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
