@@ -124,22 +124,27 @@ function ViewContent1({ s_data }) {
         type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
     };
 
+    // 轉換平面座標為3D世界座標
     function screenToWorld(screenX, screenY, camera) {
+        // 屏幕座標轉成NDC(左上: (-1, 1); 右下:(1, -1))
         const mouse = new THREE.Vector2(
             (screenX / window.innerWidth) * 2 - 1,
             -(screenY / window.innerHeight) * 2 + 1
         );
 
+        // Raycaster 建立一條從相機發射出去的射線
         const raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(mouse, camera);
 
-        // Y=0 地面平面
+        // 定義一個平面：Y=0（水平地板
+        // Plane(normal: 法向量, distance: 到原點的距離)
         const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
+        // 求射線與平面交點
         const intersectPoint = new THREE.Vector3();
         raycaster.ray.intersectPlane(plane, intersectPoint);
 
-        return intersectPoint; // 包含 x, y, z（其中 y 會是 0）
+        return intersectPoint; //包含x, y = 0, z 
     }
 
     // 調整相機目標、位置
@@ -192,11 +197,11 @@ function ViewContent1({ s_data }) {
                 <ambientLight intensity={0.1} />
                 <directionalLight
                     castShadow
-                    intensity={0.003}
-                    position={[0, 50, 0]}
+                    intensity={0.001}
+                    position={[0, 100, 0]}
                 />
                 {/*環境貼圖------------------------------->關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
-                <Environment files="/image/hdr/industrial_workshop_foundry_4k.exr" />
+                <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
                 {/*建築*/}
                 <Box type="wall_concrete" position={[10, 45.5, -89.5]} args={[200, 90, 1]} />
                 <HoleBox type="wall_concrete" position={[-89.5, 45.5, 10]} args={[1, 90, 200]} />
@@ -281,7 +286,7 @@ function ViewContent2({ s_data }) {
                 <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
                 <ambientLight intensity={1.5} />
                 <directionalLight position={[10, 100, 10]} />
-                <Environment files="/image/hdr/industrial_workshop_foundry_4k.exr" />
+                <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
                 <ThirdPersonController
                     cameraPosition={camPos}
                     orbitTarget={camTarget}
@@ -304,7 +309,7 @@ function ViewContent3() {
             <ComponentView3 clickable_view1={false} position={[0, 0, 0]} />
             <ambientLight intensity={1.5} />
             <directionalLight position={[10, 100, 10]} />
-            <Environment files="/image/hdr/industrial_workshop_foundry_4k.exr" />
+            <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
             <ThirdPersonController
                 cameraPosition={camPos}
                 orbitTarget={camTarget}
@@ -334,7 +339,7 @@ function ViewContent4() {
                 position={[0, 50, 0]}
             />
             {/*環境貼圖------------------------------->關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
-            <Environment files="/image/hdr/industrial_workshop_foundry_4k.exr" />
+            <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
 
             <TestBuilding position={[0, 0, 0]} />
             {(s_cameraType === "third" || s_cameraType === "drag") && (
