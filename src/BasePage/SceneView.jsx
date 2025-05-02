@@ -300,7 +300,7 @@ function ViewContent1({ s_data }) {
                 <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
                 <TestModle position={[80, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
-                {/* <Reactor3 position={[60, 1, -60]}/> */}
+                <Reactor3 position={[60, 1, -60]}/>
 
                 {/* 拖拽動態載入模型 */}
                 {s_view1Component.length > 0
