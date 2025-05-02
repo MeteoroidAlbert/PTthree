@@ -157,6 +157,9 @@ function ViewContent1({ s_data }) {
 
     const { camera } = useThree(); //----------------------------------------------->拿取當前View內的camera
 
+    useEffect(() => {
+        console.log("View1重新渲染!")
+    }, [])
 
     // const {
     //     s_cameraType,
@@ -200,15 +203,15 @@ function ViewContent1({ s_data }) {
         const raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(mouse, camera);
 
-        // 定義一個平面：Y=0（水平地板
+        // 定義一個平面：Y=0.5（水平地板
         // Plane(normal: 法向量, distance: 到原點的距離)
-        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.5);
 
         // 求射線與平面交點
         const intersectPoint = new THREE.Vector3();
         raycaster.ray.intersectPlane(plane, intersectPoint);
-
-        return intersectPoint; //包含x, y = 0, z 
+        const {x, y, z} = intersectPoint
+        return [x, y, z]; //包含x, y = 0, z 
     }
 
     // 調整相機目標、位置
@@ -240,6 +243,7 @@ function ViewContent1({ s_data }) {
             // }])
             dispatch(set_s_view1Component({
                 name: s_draggingObj,
+                id: `${s_draggingObj}_${s_view1Component.filter(x => x.name === s_draggingObj).length}`,
                 props: {
                     position: screenToWorld(x, y, camera)
                 }
@@ -259,7 +263,7 @@ function ViewContent1({ s_data }) {
             { name: "right", keys: ["ArrowRight", "d", "D"] },
             { name: "jump", keys: ["Space"] },
         ]}>
-            {/* <Physics gravity={[0, -30, 0]}> */}
+            <Physics gravity={[0, -30, 0]}>
                 {/*光源*/}
                 <ambientLight intensity={0.1} />
                 <directionalLight
@@ -282,7 +286,7 @@ function ViewContent1({ s_data }) {
                     onClick={() => handlePanelShowing("Reactor1")}
                 />
                 <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
-                {/* <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} /> */}
+                <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
                 <Mixer position={[50, 0.55, -70]} rotation={[0, -Math.PI / 2, 0]} onClick={() => handlePanelShowing("Mixer")} />
                 <Pallet position={[0, 0, 100]} scale={[12, 12, 12]} />
                 <PalletTruck position={[26.5, 0, 50]} scale={[12, 12, 12]} rotation={[0, Math.PI, 0]} />
@@ -292,7 +296,7 @@ function ViewContent1({ s_data }) {
 
                 <TestModle position={[80, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
 
-                {s_view1Component.length > 0 && s_view1Component.map((x, i) => React.createElement(componentMap[x.name], { key: i, ...x.props }))}
+                {s_view1Component.length > 0 && s_view1Component.map(({name, id, props}, i) => React.createElement(componentMap[name], { key: id, id, ...props}))}
                 {/*x軸警示線*/}
                 {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
                 {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
@@ -315,9 +319,8 @@ function ViewContent1({ s_data }) {
 
                 {s_cameraType === "first" && (
                     <>
-                        {/* <PointerLockControls />
-                        <Player /> */}
-                        <FirstPersonControls/>
+                        <PointerLockControls />
+                        <Player />
                     </>
                 )}
 
@@ -335,7 +338,7 @@ function ViewContent1({ s_data }) {
                         labelColor="white"
                     />
                 </GizmoHelper>
-            {/* </Physics> */}
+            </Physics>
         </KeyboardControls>
     )
 }
@@ -345,12 +348,12 @@ function ViewContent2({ s_data }) {
     const { ComponentView2, s_selectedObj_view2 } = useSelector(state => state.three)
 
     // 強制避免re-render造成視角變化
-    const camPos = useMemo(() => new THREE.Vector3(25, 25, 25), [ComponentView2]);
-    const camTarget = useMemo(() => new THREE.Vector3(0, 1, 0), [ComponentView2]);
+    const camPos = useMemo(() => new THREE.Vector3(25, 25, 25), [s_selectedObj_view2]);
+    const camTarget = useMemo(() => new THREE.Vector3(0, 1, 0), [s_selectedObj_view2]);
 
     return (
         <>
-            {/* <Physics gravity={[0, -30, 0]}> */}
+            <Physics gravity={[0, -30, 0]}>
                 <color attach="background" args={['#d6edf3']} />
                 {
                     s_selectedObj_view2 &&
@@ -364,7 +367,7 @@ function ViewContent2({ s_data }) {
                     cameraPosition={camPos}
                     orbitTarget={camTarget}
                 />
-            {/* </Physics> */}
+            </Physics>
         </>
     )
 }
@@ -374,8 +377,8 @@ function ViewContent3() {
     const { ComponentView3, s_selectedObj_view3 } = useSelector(state => state.three)
 
     // 強制避免re-render造成視角變化
-    const camPos = useMemo(() => new THREE.Vector3(5, 5, 5), [ComponentView3]);
-    const camTarget = useMemo(() => new THREE.Vector3(0, 1, 0), [ComponentView3]);
+    const camPos = useMemo(() => new THREE.Vector3(5, 5, 5), [s_selectedObj_view3]);
+    const camTarget = useMemo(() => new THREE.Vector3(0, 1, 0), [s_selectedObj_view3]);
 
     return (
         <>

@@ -68,19 +68,19 @@ export default function Reactor1({
 
 
     const content = (
-        // <RigidBody
-        //     ref={rigidBodyRef}
-        //     type="fixed"
-        //     colliders="trimesh"
-        //     userData={{
-        //         name: "reactor1",
-        //     }}
-        //     onCollisionEnter={({ other }) => {
-        //         if (other.rigidBodyObject.userData?.name === "player") {
-        //             console.log("碰撞發生！")
-        //         }
-        //     }}
-        // >
+        <RigidBody
+            ref={rigidBodyRef}
+            type="fixed"
+            colliders="trimesh"
+            userData={{
+                name: "reactor1",
+            }}
+            onCollisionEnter={({ other }) => {
+                if (other.rigidBodyObject.userData?.name === "player") {
+                    console.log("碰撞發生！")
+                }
+            }}
+        >
             <group position={position} rotation={rotation}>
                 <Gltf
                     src="/modal/reactor/scene.gltf"
@@ -92,7 +92,7 @@ export default function Reactor1({
                 />
             </group>
 
-        // </RigidBody>
+        </RigidBody>
     )
 
     return s_cameraType === "drag" ? (

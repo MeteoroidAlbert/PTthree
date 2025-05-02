@@ -56,6 +56,17 @@ const threeDslice = createSlice({
         },
         set_s_screenPos(state, action) {
             state.s_screenPos = action.payload;
+        },
+        adjustPosition(state, action) {
+            const {id, position} = action.payload;
+            state.s_view1Component = state.s_view1Component.map(x => ({
+                ...x,
+                props: {
+                    ...x.props,
+                    position: x.id === id ? position : x.props.position  
+                }
+                
+            }))
         }
     }
 })
@@ -71,7 +82,8 @@ export const {
     setComponentView3,
     set_s_draggingObj,
     set_s_view1Component,
-    set_s_screenPos
+    set_s_screenPos,
+    adjustPosition
 } = threeDslice.actions;
 
 export default threeDslice.reducer;

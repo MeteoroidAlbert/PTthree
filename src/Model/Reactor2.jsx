@@ -5,7 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useThreeContext } from "../Context/threeContext";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useAdjustYToGround } from "../Hooks/useAdjustYToGround";
+
 
 
 function Pillar({ position, s_color }) {
@@ -59,17 +61,18 @@ function NewBallValve2({ position, rotation, clickable_view2 }) {
     )
 }
 
-export default function Reactor2({ position, onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
+export default function Reactor2({ position, id, onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
     const [s_alarm, set_s_alarm] = useState(false);
     const [s_color, set_s_color] = useState("#1e90ff");
     const [s_adjPos, set_s_adjPos] = useState([0, 0, 0]);
     // const { s_cameraType } = useThreeContext();
-    const {s_cameraType} = useSelector(state => state.three);
+    const { s_cameraType } = useSelector(state => state.three);
 
     const groupRef = useRef();
     const originalColors = useRef(new Map());
 
-    const { scene } = useThree();
+    const dispatch = useDispatch();
+    const adjustYToGround = useAdjustYToGround();
 
     const handleClick = () => {
         if (!clickable_view1) return;
@@ -242,16 +245,9 @@ export default function Reactor2({ position, onClick, clickable_view1 = true, cl
         else set_s_color("#ff0000");
     }, [s_data])
 
-    // useEffect(() => {
-    //     if (!groupRef.current) return;
-    //     // 計算邊界盒
-    //     const box = new THREE.Box3().setFromObject(groupRef.current)
-    //     const yOffset = box.min.y
-    //     console.log("yOffset:", yOffset);
-    //     // 設定位置，使物件底部對齊 y=0
-
-    //     groupRef.current.position.set(position.x, position.y - yOffset, position.z)
-    // }, [])
+    useEffect(() => {
+        adjustYToGround(groupRef, position, id)
+    }, [])
 
     return s_cameraType === "drag" ? (
         <DragControls dragLimits={[undefined, [0, 0], undefined]}>

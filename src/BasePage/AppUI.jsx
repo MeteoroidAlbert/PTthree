@@ -52,7 +52,7 @@ export default function AppUI() {
                     }}
                     draggable
                 >
-                    Reactor2
+                    <img src="./image/toolbar/Reactor2.jpg"/>
                 </div>
             </Drawer>
         </>
