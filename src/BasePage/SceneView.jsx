@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { Environment, GizmoHelper, GizmoViewport, Html, KeyboardControls, OrbitControls, PointerLockControls, Text, useHelper, View } from '@react-three/drei';
 import Reactor1 from '../Model/Reactor1';
@@ -36,6 +36,7 @@ import {
     set_s_screenPos
 } from "../Redux/Slice/3Dslice";
 import FirstPersonControls from "../Model/camera/FirstPersonControls";
+import Reactor3 from "../Model/Reactor3";
 
 //相機位置與目標-----------------------------------------------------------> 0: cameraPosition, 1: orbitTarget
 const positionTarget = {
@@ -210,7 +211,7 @@ function ViewContent1({ s_data }) {
         // 求射線與平面交點
         const intersectPoint = new THREE.Vector3();
         raycaster.ray.intersectPlane(plane, intersectPoint);
-        const {x, y, z} = intersectPoint
+        const { x, y, z } = intersectPoint
         return [x, y, z]; //包含x, y = 0, z 
     }
 
@@ -255,6 +256,10 @@ function ViewContent1({ s_data }) {
         console.log("s_view1Component:", s_view1Component)
     }, [s_view1Component])
 
+    useEffect(() => {
+        console.log("觸發相機視角、目標變化")
+    }, [s_cameraPosition, s_orbitTarget])
+
     return (
         <KeyboardControls map={[
             { name: "forward", keys: ["ArrowUp", "w", "W"] },
@@ -295,8 +300,16 @@ function ViewContent1({ s_data }) {
                 <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
                 <TestModle position={[80, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
+                {/* <Reactor3 position={[60, 1, -60]}/> */}
 
-                {s_view1Component.length > 0 && s_view1Component.map(({name, id, props}, i) => React.createElement(componentMap[name], { key: id, id, ...props}))}
+                {/* 拖拽動態載入模型 */}
+                {s_view1Component.length > 0
+                    && s_view1Component.map(({ name, id, props }, i) =>
+                        <Suspense key={id} fallback={null}>
+                            {React.createElement(componentMap[name], { key: id, id, ...props })}
+                        </Suspense>
+                    )
+                }
                 {/*x軸警示線*/}
                 {Array.from({ length: 22 }).map((x, i) => <CautionTape position={[-90 + 3 * i, 1, 43]} rotation={[0, Math.PI / 4, 0]} />)}
                 {Array.from({ length: 28 }).map((x, i) => <CautionTape position={[-24 + 3 * i, 1, -50]} rotation={[0, Math.PI / 4, 0]} />)}
@@ -385,7 +398,7 @@ function ViewContent3() {
             <color attach="background" args={['#eef39d']} />
             {
                 s_selectedObj_view3 &&
-                React.createElement(componentMap[s_selectedObj_view3], { clickable_view1:false, position: new THREE.Vector3(0, 0, 0) })
+                React.createElement(componentMap[s_selectedObj_view3], { clickable_view1: false, position: new THREE.Vector3(0, 0, 0) })
             }
             {/* <ComponentView3 clickable_view1={false} position={[0, 0, 0]} /> */}
             <ambientLight intensity={1.5} />
