@@ -1,5 +1,6 @@
 import { DragControls } from "@react-three/drei";
 import { useThreeContext } from "../Context/threeContext";
+import { useSelector } from "react-redux";
 
 function Pillar({ position }) {
     return (
@@ -18,7 +19,8 @@ function Pillar({ position }) {
 }
 
 export default function Scales({ position, scale, rotation }) {
-    const {s_cameraType} = useThreeContext();
+    // const {s_cameraType} = useThreeContext();
+    const {s_cameraType} = useSelector(state => state.three);
 
     const pillarPositions = [
         [4, 0, 2.5],

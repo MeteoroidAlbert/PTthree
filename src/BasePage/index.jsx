@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import AppUI from "./AppUI";
 import R3FCanvas from "./R3FCanvas";
 import { useThreeContext } from "../Context/threeContext";
+import { useSelector, useDispatch } from "react-redux";
+import { set_s_screenPos } from "../Redux/Slice/3Dslice";
 
 export default function ThreeScene() {
     const [s_data, set_s_data] = useState(undefined);  // 存取後端資料
-    const { set_s_screenPos } = useThreeContext();
+    // const { set_s_screenPos } = useThreeContext();
+    const dispatch = useDispatch();
 
     const ws = useRef(null);
     const divRef = useRef();
@@ -46,7 +49,12 @@ export default function ThreeScene() {
             x: event.clientX,
             y: event.clientY,
         }
-        set_s_screenPos(screenPos)
+        // set_s_screenPos(screenPos);
+        dispatch(set_s_screenPos(screenPos));
+        setTimeout(() => {
+            // set_s_screenPos({});
+            dispatch(set_s_screenPos({}))
+        }, [500])
     }
 
     const handleOnDragOver = (event) => {

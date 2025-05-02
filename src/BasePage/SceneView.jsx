@@ -21,7 +21,21 @@ import { Button } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import TestBuilding from "../Model/Test_building";
 import { componentMap } from "../util";
-
+import { useSelector, useDispatch } from "react-redux";
+import {
+    set_s_cameraType,
+    set_s_isPlayerShowing,
+    set_s_selectedObj_view2,
+    set_s_visible_view2,
+    setComponentView2,
+    set_s_selectedObj_view3,
+    set_s_visible_view3,
+    setComponentView3,
+    set_s_draggingObj,
+    set_s_view1Component,
+    set_s_screenPos
+} from "../Redux/Slice/3Dslice";
+import FirstPersonControls from "../Model/camera/FirstPersonControls";
 
 //相機位置與目標-----------------------------------------------------------> 0: cameraPosition, 1: orbitTarget
 const positionTarget = {
@@ -31,17 +45,56 @@ const positionTarget = {
 };
 
 export default function SceneViews({ s_data }) {
+    // const {
+    //     s_cameraType,
+    //     set_s_selectedObj_view2,
+    //     s_visible_view2,
+    //     ComponentView2,
+    //     setComponentView2,
+    //     set_s_selectedObj_view3,
+    //     s_visible_view3,
+    //     ComponentView3,
+    //     setComponentView3,
+    // } = useThreeContext();
+
     const {
         s_cameraType,
-        set_s_selectedObj_view2,
+        s_selectedObj_view2,
         s_visible_view2,
         ComponentView2,
-        setComponentView2,
-        set_s_selectedObj_view3,
+        s_selectedObj_view3,
         s_visible_view3,
         ComponentView3,
-        setComponentView3,
-    } = useThreeContext();
+    } = useSelector(state => state.three);
+
+    const dispatch = useDispatch();
+
+    // 延遲visible = true(hint: 使View2可以表現出Drawer行為)
+    useEffect(() => {
+        if (s_selectedObj_view2 && s_cameraType === "third") {
+            setTimeout(() => {
+                dispatch(set_s_visible_view2(true));
+            }, 100)
+
+        }
+        else {
+            dispatch(set_s_visible_view2(false));
+        }
+    }, [s_selectedObj_view2])
+
+
+    // 延遲visible = true(hint: 使View3可以表現出Drawer行為)
+    useEffect(() => {
+        if (s_selectedObj_view3 && s_cameraType === "third") {
+            setTimeout(() => {
+                dispatch(set_s_visible_view3(true));
+            }, 100)
+
+        }
+        else {
+            dispatch(set_s_visible_view3(false));
+        }
+    }, [s_selectedObj_view3])
 
     return (
         <>
@@ -49,7 +102,7 @@ export default function SceneViews({ s_data }) {
                 <ViewContent1 s_data={s_data} />
                 {/* <ViewContent4/> */}
             </View>
-            {(ComponentView2 && s_cameraType === "third") && (
+            {(s_selectedObj_view2 && s_cameraType === "third") && (
                 <View
                     key="view2"
                     index={2}
@@ -63,12 +116,12 @@ export default function SceneViews({ s_data }) {
                 <CloseOutlined
                     className={`absolute top-2 left-2 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view2 ? "translate-x-0" : "-translate-x-full"}`}
                     onClick={() => {
-                        setComponentView2(undefined);
-                        set_s_selectedObj_view2(undefined);
+                        dispatch(setComponentView2(undefined));
+                        dispatch(set_s_selectedObj_view2(undefined));
                     }}
                 />
             )}
-            {(ComponentView3 && s_cameraType === "third") && (
+            {(s_selectedObj_view3 && s_cameraType === "third") && (
                 <View
                     key="view3"
                     index={3}
@@ -82,8 +135,8 @@ export default function SceneViews({ s_data }) {
                 <CloseOutlined
                     className={`absolute top-[72px] right-7 z-[100] transition-transform duration-1000 ease-in-out ${s_visible_view3 ? "translate-y-0" : "-translate-y-full"}`}
                     onClick={() => {
-                        setComponentView3(undefined);
-                        set_s_selectedObj_view3(undefined);
+                        dispatch(setComponentView3(undefined));
+                        dispatch(set_s_selectedObj_view3(undefined));
                     }}
                 />
             )}
@@ -105,21 +158,32 @@ function ViewContent1({ s_data }) {
     const { camera } = useThree(); //----------------------------------------------->拿取當前View內的camera
 
 
+    // const {
+    //     s_cameraType,
+    //     s_selectedObj_view2,
+    //     set_s_selectedObj_view2,
+    //     setComponentView2,
+    //     setComponentView3,
+    //     s_screenPos,
+    //     s_view1Component,
+    //     set_s_view1Component,
+    //     s_draggingObj
+    // } = useThreeContext();
+
     const {
         s_cameraType,
         s_selectedObj_view2,
-        set_s_selectedObj_view2,
-        setComponentView2,
-        setComponentView3,
         s_screenPos,
         s_view1Component,
-        set_s_view1Component,
         s_draggingObj
-    } = useThreeContext();
+    } = useSelector(state => state.three);
+
+    const dispatch = useDispatch();
 
     const handlePanelShowing = (type) => {
         set_s_islocking(prevState => !prevState);
-        set_s_selectedObj_view2(prev => prev === type ? undefined : type);
+        // dispatch(set_s_selectedObj_view2(prev => prev === type ? undefined : type));
+        dispatch(set_s_selectedObj_view2(type));
         type === "Reactor1" && set_s_isShowing_reactor(prev => !prev);
         type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
     };
@@ -160,24 +224,27 @@ function ViewContent1({ s_data }) {
     }, [s_islocking, s_selectedObj_view2]);
 
     useEffect(() => {
-        setComponentView2(undefined);
-        setComponentView3(undefined);
+        dispatch(setComponentView2(undefined));
+        dispatch(setComponentView3(undefined));
     }, [s_cameraType])
 
     useEffect(() => {
-        // console.log("s_screenPos:", s_screenPos);
+        if (Object.keys(s_screenPos).length === 0) return;
         const { x, y } = s_screenPos;
-        console.log(screenToWorld(x, y, camera));
         if (s_draggingObj) {
-            set_s_view1Component(prev => [...prev, {
+            // set_s_view1Component(prev => [...prev, {
+            //     name: s_draggingObj,
+            //     props: {
+            //         position: screenToWorld(x, y, camera)
+            //     }
+            // }])
+            dispatch(set_s_view1Component({
                 name: s_draggingObj,
                 props: {
                     position: screenToWorld(x, y, camera)
                 }
-            }])
+            }))
         }
-
-
     }, [s_screenPos])
 
     useEffect(() => {
@@ -192,7 +259,7 @@ function ViewContent1({ s_data }) {
             { name: "right", keys: ["ArrowRight", "d", "D"] },
             { name: "jump", keys: ["Space"] },
         ]}>
-            <Physics gravity={[0, -30, 0]}>
+            {/* <Physics gravity={[0, -30, 0]}> */}
                 {/*光源*/}
                 <ambientLight intensity={0.1} />
                 <directionalLight
@@ -214,8 +281,8 @@ function ViewContent1({ s_data }) {
                     rotation={[0, Math.PI * 1.5, 0]}
                     onClick={() => handlePanelShowing("Reactor1")}
                 />
-                <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
-                <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => set_s_selectedObj_view2("Reactor2")} s_data={s_data} />
+                <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
+                {/* <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} /> */}
                 <Mixer position={[50, 0.55, -70]} rotation={[0, -Math.PI / 2, 0]} onClick={() => handlePanelShowing("Mixer")} />
                 <Pallet position={[0, 0, 100]} scale={[12, 12, 12]} />
                 <PalletTruck position={[26.5, 0, 50]} scale={[12, 12, 12]} rotation={[0, Math.PI, 0]} />
@@ -248,8 +315,9 @@ function ViewContent1({ s_data }) {
 
                 {s_cameraType === "first" && (
                     <>
-                        <PointerLockControls />
-                        <Player />
+                        {/* <PointerLockControls />
+                        <Player /> */}
+                        <FirstPersonControls/>
                     </>
                 )}
 
@@ -267,13 +335,14 @@ function ViewContent1({ s_data }) {
                         labelColor="white"
                     />
                 </GizmoHelper>
-            </Physics>
+            {/* </Physics> */}
         </KeyboardControls>
     )
 }
 
 function ViewContent2({ s_data }) {
-    const { ComponentView2 } = useThreeContext();
+    // const { ComponentView2 } = useThreeContext();
+    const { ComponentView2, s_selectedObj_view2 } = useSelector(state => state.three)
 
     // 強制避免re-render造成視角變化
     const camPos = useMemo(() => new THREE.Vector3(25, 25, 25), [ComponentView2]);
@@ -281,9 +350,13 @@ function ViewContent2({ s_data }) {
 
     return (
         <>
-            <Physics gravity={[0, -30, 0]}>
+            {/* <Physics gravity={[0, -30, 0]}> */}
                 <color attach="background" args={['#d6edf3']} />
-                <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} />
+                {
+                    s_selectedObj_view2 &&
+                    React.createElement(componentMap[s_selectedObj_view2], { clickable_view1: false, clickable_view2: true, position: new THREE.Vector3(0, 0, 0), s_data: s_data })
+                }
+                {/* <ComponentView2 clickable_view1={false} clickable_view2={true} position={[0, 0, 0]} s_data={s_data} /> */}
                 <ambientLight intensity={1.5} />
                 <directionalLight position={[10, 100, 10]} />
                 <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
@@ -291,13 +364,14 @@ function ViewContent2({ s_data }) {
                     cameraPosition={camPos}
                     orbitTarget={camTarget}
                 />
-            </Physics>
+            {/* </Physics> */}
         </>
     )
 }
 
 function ViewContent3() {
-    const { ComponentView3 } = useThreeContext();
+    // const { ComponentView3 } = useThreeContext();
+    const { ComponentView3, s_selectedObj_view3 } = useSelector(state => state.three)
 
     // 強制避免re-render造成視角變化
     const camPos = useMemo(() => new THREE.Vector3(5, 5, 5), [ComponentView3]);
@@ -306,7 +380,11 @@ function ViewContent3() {
     return (
         <>
             <color attach="background" args={['#eef39d']} />
-            <ComponentView3 clickable_view1={false} position={[0, 0, 0]} />
+            {
+                s_selectedObj_view3 &&
+                React.createElement(componentMap[s_selectedObj_view3], { clickable_view1:false, position: new THREE.Vector3(0, 0, 0) })
+            }
+            {/* <ComponentView3 clickable_view1={false} position={[0, 0, 0]} /> */}
             <ambientLight intensity={1.5} />
             <directionalLight position={[10, 100, 10]} />
             <Environment files="/image/environment/empty_warehouse_01_1k.exr" />

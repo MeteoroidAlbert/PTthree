@@ -5,12 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThreeProvider } from './Context/threeContext';
 import Router from './Routers';
+import { store } from './Redux/store';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThreeProvider>
-      <Router/>
+      <Provider store={store}>
+        <Router />
+      </Provider>
     </ThreeProvider>
   </React.StrictMode>
 );

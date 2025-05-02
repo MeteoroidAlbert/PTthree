@@ -4,6 +4,8 @@ import { BallValve1, BallValve2 } from "./BallValve";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useThreeContext } from "../Context/threeContext";
 import * as THREE from "three";
+import { useThree } from "@react-three/fiber";
+import { useSelector } from "react-redux";
 
 
 function Pillar({ position, s_color }) {
@@ -57,13 +59,17 @@ function NewBallValve2({ position, rotation, clickable_view2 }) {
     )
 }
 
-export default function Reactor2({ position=[0, 0, 0], onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
+export default function Reactor2({ position, onClick, clickable_view1 = true, clickable_view2, s_data = 1 }) {
     const [s_alarm, set_s_alarm] = useState(false);
     const [s_color, set_s_color] = useState("#1e90ff");
-    const { s_cameraType } = useThreeContext();
+    const [s_adjPos, set_s_adjPos] = useState([0, 0, 0]);
+    // const { s_cameraType } = useThreeContext();
+    const {s_cameraType} = useSelector(state => state.three);
 
     const groupRef = useRef();
     const originalColors = useRef(new Map());
+
+    const { scene } = useThree();
 
     const handleClick = () => {
         if (!clickable_view1) return;
@@ -119,7 +125,7 @@ export default function Reactor2({ position=[0, 0, 0], onClick, clickable_view1 
 
     const Content = () => {
         return (
-            <group position={position} scale={[1.3, 1.3, 1.3]} ref={groupRef} onClick={handleClick} onDoubleClick={resetColors} >
+            <group ref={groupRef} position={position} scale={[1.3, 1.3, 1.3]} onClick={handleClick} onDoubleClick={resetColors} >
                 <Billboard>
                     <Text position={[3, 15, 0]} color="white" fontSize="5.5" strokeColor="black" strokeWidth={0.05}>
                         {s_data.toFixed(2)}
@@ -218,15 +224,15 @@ export default function Reactor2({ position=[0, 0, 0], onClick, clickable_view1 
         )
     }
 
-    useEffect(() => {
-        groupRef.current.traverse((child) => {              // traverse --------------------------->three.js 中，遍歷Object3D對象的方法
-            if (child.isMesh) {
-                // Clone材質以保存其原色
-                child.material = child.material.clone();
-                originalColors.current.set(child, child.material.color.clone());
-            }
-        });
-    }, [groupRef]);
+    // useEffect(() => {
+    //     groupRef.current.traverse((child) => {              // traverse --------------------------->three.js 中，遍歷Object3D對象的方法
+    //         if (child.isMesh) {
+    //             // Clone材質以保存其原色
+    //             child.material = child.material.clone();
+    //             originalColors.current.set(child, child.material.color.clone());
+    //         }
+    //     });
+    // }, [groupRef]);
 
     useEffect(() => {
         // console.log("s_data:", s_data)
@@ -236,6 +242,16 @@ export default function Reactor2({ position=[0, 0, 0], onClick, clickable_view1 
         else set_s_color("#ff0000");
     }, [s_data])
 
+    // useEffect(() => {
+    //     if (!groupRef.current) return;
+    //     // 計算邊界盒
+    //     const box = new THREE.Box3().setFromObject(groupRef.current)
+    //     const yOffset = box.min.y
+    //     console.log("yOffset:", yOffset);
+    //     // 設定位置，使物件底部對齊 y=0
+
+    //     groupRef.current.position.set(position.x, position.y - yOffset, position.z)
+    // }, [])
 
     return s_cameraType === "drag" ? (
         <DragControls dragLimits={[undefined, [0, 0], undefined]}>

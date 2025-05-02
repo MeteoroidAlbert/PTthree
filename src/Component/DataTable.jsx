@@ -133,8 +133,8 @@ export const DataTableReactor = () => {
         <Html
             position={[-20, 25, -20]}
             rotation={[0, Math.PI / 2, 0]}
-            transform o
-            cclude
+            transform 
+            occlude
             as="div"
             style={{ pointerEvents: 'auto' }}
         >

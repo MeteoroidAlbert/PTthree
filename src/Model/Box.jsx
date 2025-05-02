@@ -53,7 +53,7 @@ export const Box = ({ type, position, args }) => {
 
 
     return (
-        <RigidBody type="fixed" >
+        // <RigidBody type="fixed" >
         <mesh position={position} castShadow >
             <boxGeometry args={args} />
             <meshStandardMaterial
@@ -67,7 +67,7 @@ export const Box = ({ type, position, args }) => {
                 side={THREE.DoubleSide}
             />
         </mesh>
-        </RigidBody>
+        // </RigidBody>
     );
 }
 

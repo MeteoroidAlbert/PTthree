@@ -5,6 +5,7 @@ import { RigidBody, useRapier } from '@react-three/rapier'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 
+
 export default function Reactor1({
     position,
     scale=[3, 3, 3],
@@ -16,46 +17,43 @@ export default function Reactor1({
     const rigidBodyRef = useRef();
     const playerPosRef = useRef();
     const lastDistance = useRef(null);
-    const { world } = useRapier();
-
+    // const { world } = useRapier();
     const reactorPosition = useMemo(() => new THREE.Vector3(...position), [position]);
 
-    // const [lastDistance, setLastDistance] = useState(null);
+    // 物理引擎使用
+    // useFrame(() => {
+    //     if (world) {
+    //         world.forEachRigidBody((body) => {
+    //             const pos = body.translation();
+    //             const name = body.userData?.name;
+    //             if (name === "player") {
+    //                 playerPosRef.current = {
+    //                     x: pos.x,
+    //                     y: pos.y,
+    //                     z: pos.z,
+    //                 };
 
+    //                 const dx = pos.x - reactorPosition.x;
+    //                 const dy = pos.y - reactorPosition.y;
+    //                 const dz = pos.z - reactorPosition.z;
+    //                 const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    useFrame(() => {
-        if (world) {
-            world.forEachRigidBody((body) => {
-                const pos = body.translation();
-                const name = body.userData?.name;
-                if (name === "player") {
-                    playerPosRef.current = {
-                        x: pos.x,
-                        y: pos.y,
-                        z: pos.z,
-                    };
-
-                    const dx = pos.x - reactorPosition.x;
-                    const dy = pos.y - reactorPosition.y;
-                    const dz = pos.z - reactorPosition.z;
-                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-                    // 優化性能: 避免不必要的重複setState
-                    if (lastDistance.current === null || Math.abs(lastDistance.current - distance) > 1) {
-                        // setLastDistance(distance); // 更新距離
-                        lastDistance.current = distance;
-                        if (distance < 50) {
-                            if (!s_isDialogueShowing) set_s_isDialogueShowing(true);
-                            if (s_interactObj !== "reactor1") set_s_interactObj("reactor1");
-                        } else {
-                            if (s_isDialogueShowing) set_s_isDialogueShowing(false);
-                            if (s_interactObj === "reactor1") set_s_interactObj(undefined);
-                        }
-                    }
-                }
-            });
-        }
-    });
+    //                 // 優化性能: 避免不必要的重複setState
+    //                 if (lastDistance.current === null || Math.abs(lastDistance.current - distance) > 1) {
+    //                     // setLastDistance(distance); // 更新距離
+    //                     lastDistance.current = distance;
+    //                     if (distance < 50) {
+    //                         if (!s_isDialogueShowing) set_s_isDialogueShowing(true);
+    //                         if (s_interactObj !== "reactor1") set_s_interactObj("reactor1");
+    //                     } else {
+    //                         if (s_isDialogueShowing) set_s_isDialogueShowing(false);
+    //                         if (s_interactObj === "reactor1") set_s_interactObj(undefined);
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     }
+    // });
 
 
 
@@ -70,19 +68,19 @@ export default function Reactor1({
 
 
     const content = (
-        <RigidBody
-            ref={rigidBodyRef}
-            type="fixed"
-            colliders="trimesh"
-            userData={{
-                name: "reactor1",
-            }}
-            onCollisionEnter={({ other }) => {
-                if (other.rigidBodyObject.userData?.name === "player") {
-                    console.log("碰撞發生！")
-                }
-            }}
-        >
+        // <RigidBody
+        //     ref={rigidBodyRef}
+        //     type="fixed"
+        //     colliders="trimesh"
+        //     userData={{
+        //         name: "reactor1",
+        //     }}
+        //     onCollisionEnter={({ other }) => {
+        //         if (other.rigidBodyObject.userData?.name === "player") {
+        //             console.log("碰撞發生！")
+        //         }
+        //     }}
+        // >
             <group position={position} rotation={rotation}>
                 <Gltf
                     src="/modal/reactor/scene.gltf"
@@ -94,7 +92,7 @@ export default function Reactor1({
                 />
             </group>
 
-        </RigidBody>
+        // </RigidBody>
     )
 
     return s_cameraType === "drag" ? (

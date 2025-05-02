@@ -1,7 +1,9 @@
 import { DragControls, Gltf } from '@react-three/drei';
 import { useThreeContext } from '../Context/threeContext';
+import { useSelector } from 'react-redux';
 export default function Mixer({ position, scale=[5.5, 5.5, 5.5], rotation, defaultClick = true, onClick }) {
-    const { s_cameraType } = useThreeContext();
+    // const { s_cameraType } = useThreeContext();
+    const { s_cameraType} = useSelector(state => state.three);
 
     const handleClick = () => {
         if (s_cameraType !== "third" || !defaultClick) {
