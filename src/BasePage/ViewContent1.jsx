@@ -45,6 +45,29 @@ const positionTarget = {
     Mixer: [[60, 5, -50], [60, 5, -70]]
 };
 
+// 轉換平面座標為3D世界座標
+export function screenToWorld(screenX, screenY, camera) {
+    // 屏幕座標轉成NDC(左上: (-1, 1); 右下:(1, -1))
+    const mouse = new THREE.Vector2(
+        (screenX / window.innerWidth) * 2 - 1,
+        -(screenY / window.innerHeight) * 2 + 1
+    );
+
+    // Raycaster 建立一條從相機發射出去的射線
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+
+    // 定義一個平面：Y=0.5（水平地板
+    // Plane(normal: 法向量, distance: 到原點的距離)
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.5);
+
+    // 求射線與平面交點
+    const intersectPoint = new THREE.Vector3();
+    raycaster.ray.intersectPlane(plane, intersectPoint);
+    const { x, y, z } = intersectPoint
+    return [x, y, z]; //包含x, y = 0, z 
+}
+
 export default function ViewContent1({ s_data }) {
     const [s_isShowing_reactor, set_s_isShowing_reactor] = useState(false);  //-----> Panel_ractor顯示與否
     const [s_isShowing_mixer, set_s_isShowing_mixer] = useState(false);      //-----> Panel_mixer顯示與否
@@ -92,28 +115,7 @@ export default function ViewContent1({ s_data }) {
         type === "Mixer" && setTimeout(() => set_s_isShowing_mixer(prev => !prev), 500)
     };
 
-    // 轉換平面座標為3D世界座標
-    function screenToWorld(screenX, screenY, camera) {
-        // 屏幕座標轉成NDC(左上: (-1, 1); 右下:(1, -1))
-        const mouse = new THREE.Vector2(
-            (screenX / window.innerWidth) * 2 - 1,
-            -(screenY / window.innerHeight) * 2 + 1
-        );
-
-        // Raycaster 建立一條從相機發射出去的射線
-        const raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(mouse, camera);
-
-        // 定義一個平面：Y=0.5（水平地板
-        // Plane(normal: 法向量, distance: 到原點的距離)
-        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.5);
-
-        // 求射線與平面交點
-        const intersectPoint = new THREE.Vector3();
-        raycaster.ray.intersectPlane(plane, intersectPoint);
-        const { x, y, z } = intersectPoint
-        return [x, y, z]; //包含x, y = 0, z 
-    }
+    
 
     // 調整相機目標、位置
     useEffect(() => {
