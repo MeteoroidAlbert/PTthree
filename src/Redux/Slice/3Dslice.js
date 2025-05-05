@@ -9,7 +9,7 @@ const initialState = {
     s_selectedObj_view3: undefined,
     s_visible_view3: false,
     ComponentView3: undefined,
-    s_draggingObj: undefined,
+    s_draggingObj: undefined, //拖拉、調整中元件
     s_view1Component: [],
     s_screenPos: {}
 }
@@ -57,6 +57,7 @@ const threeDslice = createSlice({
         set_s_screenPos(state, action) {
             state.s_screenPos = action.payload;
         },
+        
         adjustPosition(state, action) {
             const {id, position} = action.payload;
             state.s_view1Component = state.s_view1Component.map(x => ({

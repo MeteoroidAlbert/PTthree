@@ -7,6 +7,8 @@ import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { useDispatch, useSelector } from "react-redux";
 import { useAdjustYToGround } from "../Hooks/useAdjustYToGround";
+import { set_s_draggingObj } from "../Redux/Slice/3Dslice";
+import CustomDragControls from "./Controls/CustomDragControls";
 
 
 
@@ -93,10 +95,19 @@ export default function Reactor2({ position, id, onClick, clickable_view1 = true
         // });
 
         onClick && onClick();
-
-
-
     };
+
+    // 處理位置變化
+    const handlePosChange = () => {
+        const pos = groupRef.current.position; //這是Vector3 Object需要轉回陣列再存
+        console.log("pos:", pos);
+        const pos_arr = Object.values(pos);
+        adjustYToGround(groupRef, pos_arr, id);
+    }
+
+    const handleDragStart = () => {
+        dispatch(set_s_draggingObj("Reactor2"))
+    }
 
     const resetColors = () => {
         set_s_alarm(false);
@@ -105,9 +116,6 @@ export default function Reactor2({ position, id, onClick, clickable_view1 = true
                 child.material.color.copy(originalColors.current.get(child));
             }
         });
-
-
-
     };
 
     const pillarPositions = [
@@ -250,7 +258,7 @@ export default function Reactor2({ position, id, onClick, clickable_view1 = true
     }, [])
 
     return s_cameraType === "drag" ? (
-        <DragControls dragLimits={[undefined, [0, 0], undefined]}>
+        <DragControls dragLimits={[undefined, [0, 0], undefined]} onDragStart={handleDragStart} onDragEnd={handlePosChange}>
             <Content />
         </DragControls>
     ) : (
