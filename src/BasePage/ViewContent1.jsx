@@ -45,6 +45,18 @@ const positionTarget = {
     Mixer: [[60, 5, -50], [60, 5, -70]]
 };
 
+//產生3D物件ID
+const generateID = (state, type) => {
+    const target = state.filter(x => x.name === type);
+    console.log("target:",target);
+    if (target.length === 0) {
+        return `${type}_1`;
+    } else {
+        const IDArr = target.map(x => x.id.split("_"));
+        return `${type}-${Math.max(...IDArr.map(x => Number(x[1]))) + 1}`;
+    }
+};
+
 // 轉換平面座標為3D世界座標
 export function screenToWorld(screenX, screenY, camera) {
     // 屏幕座標轉成NDC(左上: (-1, 1); 右下:(1, -1))
@@ -59,7 +71,7 @@ export function screenToWorld(screenX, screenY, camera) {
 
     // 定義一個平面：Y=0.5（水平地板
     // Plane(normal: 法向量, distance: 到原點的距離)
-    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.5);
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
     // 求射線與平面交點
     const intersectPoint = new THREE.Vector3();
@@ -146,7 +158,8 @@ export default function ViewContent1({ s_data }) {
             // }])
             dispatch(set_s_view1Component({
                 name: s_draggingObj,
-                id: `${s_draggingObj}_${s_view1Component.filter(x => x.name === s_draggingObj).length}`,
+                // id: `${s_draggingObj}_${s_view1Component.filter(x => x.name === s_draggingObj).length}`,
+                id: generateID(s_view1Component, s_draggingObj),
                 props: {
                     position: screenToWorld(x, y, camera)
                 }
@@ -192,8 +205,8 @@ export default function ViewContent1({ s_data }) {
                     rotation={[0, Math.PI * 1.5, 0]}
                     onClick={() => handlePanelShowing("Reactor1")}
                 />
-                <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
-                <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
+                {/* <Reactor2 key="reactor2-1" position={[0, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} />
+                <Reactor2 key="reactor2-2" position={[30, 28.5, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor2"))} s_data={s_data} /> */}
                 <Mixer position={[50, 0.55, -70]} rotation={[0, -Math.PI / 2, 0]} onClick={() => handlePanelShowing("Mixer")} />
                 <Pallet position={[0, 0, 100]} scale={[12, 12, 12]} />
                 <PalletTruck position={[26.5, 0, 50]} scale={[12, 12, 12]} rotation={[0, Math.PI, 0]} />
@@ -202,7 +215,7 @@ export default function ViewContent1({ s_data }) {
                 <Scales position={[55, 2, 18]} scale={[1.5, 1.5, 1.5]} rotation={[0, -Math.PI / 2, 0]} />
 
                 <TestModle position={[80, 1, -60]} scale={[1, 1, 1]} rotation={[0, Math.PI, 0]} />
-                <Reactor3 position={[60, 1, -30]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor3"))}/>
+                <Reactor3 position={[0, 1, -60]} onClick={() => dispatch(set_s_selectedObj_view2("Reactor3"))}/>
 
                 {/* 拖拽動態載入模型 */}
                 {s_view1Component.length > 0

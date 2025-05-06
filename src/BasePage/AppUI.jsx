@@ -49,7 +49,7 @@ export default function AppUI() {
             >
                 <div className="flex">
                     {/*元件區*/}
-                    <div className="w-3/5">
+                    <div className="w-3/5 flex gap-5">
                         {/*可拖動圖示*/}
                         <div className="flex flex-col items-center w-[97px] h-[97px]">
                             <div
@@ -62,6 +62,18 @@ export default function AppUI() {
                                 <img src="./image/toolbar/Reactor2.jpg" />
                             </div>
                             <p>Reactor2</p>
+                        </div>
+                        <div className="flex flex-col items-center w-[97px] h-[97px]">
+                            <div
+                                className="w-[95px] h-[95px] border border-gray border-solid rounded-md flex flex-col justify-center items-center"
+                                onDragStart={() => {
+                                    dispatch(set_s_draggingObj("Reactor3"))
+                                }}
+                                draggable
+                            >
+                                <img src="./image/toolbar/Reactor3.jpg" />
+                            </div>
+                            <p>Reactor3</p>
                         </div>
                     </div>
                     {/*調整區*/}

@@ -2,9 +2,12 @@ import { Gltf, useGLTF } from '@react-three/drei';
 import { useSelector } from 'react-redux';
 import CustomDragControls from './Controls/CustomDragControls';
 import { useEffect, useRef, useState } from 'react';
+import * as THREE from "three";
 
-export default function Reactor3({ ref, position, scale, rotation, onClick }) {
+export default function Reactor3({ id, position, scale, rotation, onClick }) {
     const { s_cameraType } = useSelector(state => state.three);
+    const [localPos, setLocalPos] = useState([]);
+
     const modelRef = useRef();
 
     const handleClick = () => {
@@ -14,19 +17,39 @@ export default function Reactor3({ ref, position, scale, rotation, onClick }) {
     const Content = () => {
         return (
             <Gltf
-                ref={s_cameraType === "drag" ? modelRef : ref}
+                
                 src={"/modal/reactor3/scene.gltf"}
-                position={position}
-                scale={scale}
-                rotation={rotation}
+                position={[0, 0, 0]}
+                
                 onClick={handleClick}
             />
         )
     };
 
-    return s_cameraType === "drag" ? (
-        <CustomDragControls objectRef={modelRef}>
-            <Content />
-        </CustomDragControls>
-    ) : <Content />
+    // useEffect(() => {
+    //     if (modelRef.current && position) {
+    //         const localPosition = modelRef.current.parent.worldToLocal(
+    //             new THREE.Vector3(...position)
+    //         );
+    //         console.log("localPosition:", localPosition);
+    //         setLocalPos(localPosition.toArray());
+    //     }
+    //     else {
+    //         console.log("沒有modelRef")
+    //         setLocalPos(position);
+    //     }
+    // }, [position]);
+
+    // return s_cameraType === "drag" ? (
+    //     <CustomDragControls objectRef={modelRef} modelID={id}>
+    //         <Content />
+    //     </CustomDragControls>
+    // ) : <Content />
+    return (
+        <group position={position} ref={modelRef} scale={scale} rotation={rotation}>
+            <CustomDragControls objectRef={modelRef} modelID={id} enable={s_cameraType === "drag"}>
+                <Content />
+            </CustomDragControls>
+        </group>
+    )
 }

@@ -8,13 +8,14 @@ export function useAdjustYToGround() {
 
     const adjust = useCallback((modelRef, position, id) => {
         if (!modelRef?.current || position.length === 0) return
+        
         const box = new THREE.Box3().setFromObject(modelRef.current)
         const yOffset = parseFloat(box.min.y.toFixed(2))
 
         dispatch(
             adjustPosition({
                 id,
-                position: [position[0], position[1] - yOffset + 0.5, position[2]],
+                position: [position[0], position[1] - yOffset, position[2]],
             })
         )
     }, [dispatch])
