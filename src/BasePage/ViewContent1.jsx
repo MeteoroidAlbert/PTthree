@@ -69,7 +69,7 @@ export function screenToWorld(screenX, screenY, camera) {
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
 
-    // 定義一個平面：Y=0.5（水平地板
+    // 定義一個平面：Y=0（水平地板
     // Plane(normal: 法向量, distance: 到原點的距離)
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
@@ -77,7 +77,8 @@ export function screenToWorld(screenX, screenY, camera) {
     const intersectPoint = new THREE.Vector3();
     raycaster.ray.intersectPlane(plane, intersectPoint);
     const { x, y, z } = intersectPoint
-    return [x, y, z]; //包含x, y = 0, z 
+    const pos_arr = [x, y, z].map(el => Number(el.toFixed(2)))
+    return pos_arr; //包含x, y = 0, z 
 }
 
 export default function ViewContent1({ s_data }) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Col, Drawer, Form, Input, Row, Slider, Space, Table } from 'antd';
+import { Button, Col, Drawer, Form, Input, InputNumber, Row, Slider, Space, Table } from 'antd';
 import SceneViews from "./SceneView";
 import { useThreeContext } from "../Context/threeContext";
 import { useSelector, useDispatch } from "react-redux";
@@ -99,26 +99,26 @@ export default function AppUI() {
                             <Col span={24} className="-mb-4">
                                 <Form.Item label="縮放">
                                     <Form.Item name="length" noStyle>
-                                        <Input addonBefore="長" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="長" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                     <Form.Item name="width" noStyle>
-                                        <Input addonBefore="寬" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="寬" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                     <Form.Item name="height" noStyle>
-                                        <Input addonBefore="高" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="高" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                 </Form.Item>
                             </Col>
                             <Col span={24} className="-mb-4">
                                 <Form.Item label="位置">
                                     <Form.Item name="x" noStyle>
-                                        <Input addonBefore="x" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="x" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                     <Form.Item name="y" noStyle>
-                                        <Input addonBefore="y" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="y" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                     <Form.Item name="z" noStyle>
-                                        <Input addonBefore="z" className="w-[30%] mr-[3%]" />
+                                        <InputNumber precision={2} addonBefore="z" className="w-[30%] mr-[3%]" />
                                     </Form.Item>
                                 </Form.Item>
                             </Col>
