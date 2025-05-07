@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AppUI from "./AppUI";
 import R3FCanvas from "./R3FCanvas";
-import { useThreeContext } from "../Context/threeContext";
 import { useSelector, useDispatch } from "react-redux";
-import { set_s_screenPos } from "../Redux/Slice/3Dslice";
 
 export default function ThreeScene() {
     const [s_data, set_s_data] = useState(undefined);  // 存取後端資料
@@ -43,24 +41,6 @@ export default function ThreeScene() {
         }
     }
 
-    const handleOndrop = (event) => {
-        event.preventDefault();
-        const screenPos = {
-            x: event.clientX,
-            y: event.clientY,
-        }
-        // set_s_screenPos(screenPos);
-        dispatch(set_s_screenPos(screenPos));
-        setTimeout(() => {
-            // set_s_screenPos({});
-            dispatch(set_s_screenPos({}))
-        }, [500])
-    }
-
-    const handleOnDragOver = (event) => {
-        event.preventDefault() // 讓onDrop能正常觸發
-    }
-
     useEffect(() => {
         connectToWs();
     }, [])
@@ -68,7 +48,7 @@ export default function ThreeScene() {
     return (
         <div ref={divRef} className="relative w-full h-screen" >
             <AppUI /> {/* DOM UI 元件 */}
-            <div className="w-full h-full" onDrop={handleOndrop} onDragOver={handleOnDragOver}>
+            <div className="w-full h-full">
                 <R3FCanvas eventSource={divRef} s_data={s_data} />
             </div>
 

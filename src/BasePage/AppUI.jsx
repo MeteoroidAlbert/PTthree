@@ -1,14 +1,65 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Drawer, Form, Input, InputNumber, Row, Slider, Space, Table } from 'antd';
-import SceneViews from "./SceneView";
-import { useThreeContext } from "../Context/threeContext";
 import { useSelector, useDispatch } from "react-redux";
-import { set_s_cameraType, set_s_draggingObj } from "../Redux/Slice/3Dslice";
-import { For } from "three/examples/jsm/transpiler/AST.js";
+import { RollbackOutlined } from "@ant-design/icons";
+import { reset_allState } from "../Redux/Slice/3Dslice";
+import LivestockEnergyChart from "../Component/LivestockEnergyChart";
+
+const tableColumns_Evn = [
+    {
+        title: "畜舍/環境數據",
+        dataIndex: "name",
+        width: 130,
+    },
+    {
+        title: "二氧化碳",
+        dataIndex: "CO2",
+        width: 120,
+    },
+    {
+        title: "溫度(℃)",
+        dataIndex: "temp",
+        width: 120,
+    },
+    {
+        title: "濕度(%, RH)",
+        dataIndex: "humidity",
+        width: 120,
+    },
+    {
+        title: "噪音(dB)",
+        dataIndex: "noise",
+        width: 120,
+    }
+]
+
+const fakeData_Evn = [
+    {
+        name: "雞舍",
+        CO2: "900ppm",
+        temp: "24",
+        humidity: "65",
+        noise: "61",
+    },
+    {
+        name: "豬舍",
+        CO2: "1200ppm",
+        temp: "21",
+        humidity: "68",
+        noise: "62",
+    },
+    {
+        name: "牛舍",
+        CO2: "1200ppm",
+        temp: "25",
+        humidity: "67",
+        noise: "58",
+    },
+]
 
 export default function AppUI() {
-    // const { s_cameraType, set_s_cameraType, set_s_draggingObj} = useThreeContext();
-    const { s_cameraType } = useSelector(state => state.three);
+    const { s_isFocus } = useSelector(state => state.three);
+
     const dispatch = useDispatch();
 
     return (
@@ -16,119 +67,23 @@ export default function AppUI() {
             {/* DOM元素 */}
             <Space className="absolute top-0 right-0 z-[100] p-2 bg-white border border-solid rounded-md m-2">
                 <Button
-                    onClick={() => {
-                        dispatch(set_s_cameraType("first"));
-                    }}
-                    className={`${s_cameraType === "first" ? "bg-cyan-500 text-white" : null}`}
+                    onClick={() => dispatch(reset_allState())}
                 >
-                    第一人稱
-                </Button>
-                <Button
-                    onClick={() => {
-                        dispatch(set_s_cameraType("third"));
-                    }}
-                    className={`${s_cameraType === "third" ? "bg-cyan-500 text-white" : null}`}
-                >
-                    第三人稱
-                </Button>
-                <Button
-                    onClick={() => {
-                        dispatch(set_s_cameraType("drag"));
-                    }}
-                    className={`${s_cameraType === "drag" ? "bg-cyan-500 text-white" : null}`}
-                >
-                    拖拽模式
+                    <RollbackOutlined />回到總覽
                 </Button>
             </Space>
-            <Drawer
-                height="270"
-                open={s_cameraType === "drag"}
-                mask={false}
-                placement="bottom"
-                closable={false}
-            >
-                <div className="flex">
-                    {/*元件區*/}
-                    <div className="w-3/5 flex gap-5">
-                        {/*可拖動圖示*/}
-                        <div className="flex flex-col items-center w-[97px] h-[97px]">
-                            <div
-                                className="w-[95px] h-[95px] border border-gray border-solid rounded-md flex flex-col justify-center items-center"
-                                onDragStart={() => {
-                                    dispatch(set_s_draggingObj("Reactor2"))
-                                }}
-                                draggable
-                            >
-                                <img src="./image/toolbar/Reactor2.jpg" />
-                            </div>
-                            <p>Reactor2</p>
-                        </div>
-                        <div className="flex flex-col items-center w-[97px] h-[97px]">
-                            <div
-                                className="w-[95px] h-[95px] border border-gray border-solid rounded-md flex flex-col justify-center items-center"
-                                onDragStart={() => {
-                                    dispatch(set_s_draggingObj("Reactor3"))
-                                }}
-                                draggable
-                            >
-                                <img src="./image/toolbar/Reactor3.jpg" />
-                            </div>
-                            <p>Reactor3</p>
-                        </div>
-                    </div>
-                    {/*調整區*/}
-                    <Form
-                        className="w-2/5"
-                        layout="vertical"
-                    >
-                        <Row gutter={[24, 0]}>
-                            <Col span={24} className="-mb-8">
-                                <Form.Item label="旋轉">
-                                    <Slider
-                                        min={0}
-                                        max={360}
-                                        marks={{
-                                            0: "0°",
-                                            90: "90°",
-                                            180: "180°",
-                                            270: "270°",
-                                            360: "360°"
-                                        }} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24} className="-mb-4">
-                                <Form.Item label="縮放">
-                                    <Form.Item name="length" noStyle>
-                                        <InputNumber precision={2} addonBefore="長" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                    <Form.Item name="width" noStyle>
-                                        <InputNumber precision={2} addonBefore="寬" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                    <Form.Item name="height" noStyle>
-                                        <InputNumber precision={2} addonBefore="高" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                </Form.Item>
-                            </Col>
-                            <Col span={24} className="-mb-4">
-                                <Form.Item label="位置">
-                                    <Form.Item name="x" noStyle>
-                                        <InputNumber precision={2} addonBefore="x" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                    <Form.Item name="y" noStyle>
-                                        <InputNumber precision={2} addonBefore="y" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                    <Form.Item name="z" noStyle>
-                                        <InputNumber precision={2} addonBefore="z" className="w-[30%] mr-[3%]" />
-                                    </Form.Item>
-                                </Form.Item>
-                            </Col>
+            {!s_isFocus && (
+                <Table
+                    className={`absolute top-5 left-5 z-[100] bg-white border border-solid rounded-md animate-slide-left`}
+                    columns={tableColumns_Evn}
+                    dataSource={fakeData_Evn}
+                    pagination={false}
+                />
+            )}
+            {!s_isFocus && (
+                <LivestockEnergyChart/>
+            )}
 
-
-
-                        </Row>
-                    </Form>
-                </div>
-            </Drawer>
         </>
     )
 }

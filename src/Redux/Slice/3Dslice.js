@@ -1,90 +1,75 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+//相機位置與目標-----------------------------------------------------------> 0: cameraPosition, 1: orbitTarget
+const positionTarget = {
+    default: [[-180, 150, 250], [0, 0, 0]],
+    Building1: [[-40, 70, 120], [0, 0, 0]],
+    Building2: [[-40, 110, 120], [0, 40, 0]],
+    Building3: [[-40, 150, 120], [0, 80, 0]],
+};
+
 const initialState = {
-    s_cameraType: "third",
-    s_isPlayerShowing: false,
-    s_selectedObj_view2: undefined,
-    s_visible_view2: false,
-    ComponentView2: undefined,
-    s_selectedObj_view3: undefined,
-    s_visible_view3: false,
-    ComponentView3: undefined,
-    s_draggingObj: undefined, //拖拉、調整中元件
-    s_view1Component: [],
-    s_screenPos: {}
+    s_camPos: positionTarget.default[0],
+    s_camTarget: positionTarget.default[1],
+    s_focusTarget: undefined,
+    s_isFocus: false,
+    s_view1Component: [
+        {
+            name: "Building1",
+            props: {
+                position: [0, 0, 0]
+            }
+        },
+        {
+            name: "Building2",
+            props: {
+                position: [0, 40, 0]
+            }
+        },
+        {
+            name: "Building3",
+            props: {
+                position: [0, 80, 0]
+            }
+        }
+    ]
 }
 
 const threeDslice = createSlice({
     name: "three",
     initialState,
     reducers: {
-        set_s_cameraType(state, action) {
-            state.s_cameraType = action.payload;
+        change_s_camPosNTarget(state, action) {
+            state.s_camPos = positionTarget[action.payload][0];
+            state.s_camTarget = positionTarget[action.payload][1];
         },
-        set_s_isPlayerShowing(state, action) {
-            state.s_isPlayerShowing = action.payload;
+        change_s_focusTarget(state, action) {
+            state.s_focusTarget = action.payload;
         },
-        set_s_selectedObj_view2(state, action) {
-            const prev = state.s_selectedObj_view2;
-            const current = action.payload;
-            if (prev === current) state.s_selectedObj_view2 = undefined;
-            else state.s_selectedObj_view2 = action.payload;
-
+        change_s_isFocus(state, action) {
+            state.s_isFocus = action.payload;
         },
-        set_s_visible_view2(state, action) {
-            state.s_visible_view2 = action.payload;
+        change_s_view1Component: (state, action) => {
+            const payload = action.payload;
+            if (typeof payload === "function") {
+                state.s_view1Component = payload(state.s_view1Component);  // 在reducer直接拿取最新的state處理，避免競爭錯誤
+            } else {
+                state.s_view1Component = payload;
+            }
         },
-        setComponentView2(state, action) {
-            state.ComponentView2 = action.payload;
-        },
-        set_s_selectedObj_view3(state, action) {
-            state.s_selectedObj_view3 = action.payload;
-        },
-        set_s_visible_view3(state, action) {
-            state.s_visible_view3 = action.payload;
-        },
-        setComponentView3(state, action) {
-            state.ComponentView3 = action.payload;
-        },
-        set_s_draggingObj(state, action) {
-            state.s_draggingObj = action.payload;
-        },
-        set_s_view1Component(state, action) {
-            state.s_view1Component.push(
-                action.payload
-            )
-        },
-        set_s_screenPos(state, action) {
-            state.s_screenPos = action.payload;
-        },
-        
-        adjustPosition(state, action) {
-            const {id, position} = action.payload;
-            state.s_view1Component = state.s_view1Component.map(x => ({
-                ...x,
-                props: {
-                    ...x.props,
-                    position: x.id === id ? position : x.props.position  
-                }
-                
-            }))
+        reset_allState(state, action) {
+            return initialState;
         }
     }
 })
 
 export const {
-    set_s_cameraType,
-    set_s_isPlayerShowing,
-    set_s_selectedObj_view2,
-    set_s_visible_view2,
-    setComponentView2,
-    set_s_selectedObj_view3,
-    set_s_visible_view3,
-    setComponentView3,
-    set_s_draggingObj,
-    set_s_view1Component,
-    set_s_screenPos,
-    adjustPosition
+    change_s_camPosNTarget,
+    change_s_cameraType,
+    change_s_focusTarget,
+    change_s_isFocus,
+    change_s_view1Component,
+    reset_allState,
 } = threeDslice.actions;
 
 export default threeDslice.reducer;

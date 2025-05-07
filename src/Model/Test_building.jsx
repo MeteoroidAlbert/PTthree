@@ -13,7 +13,7 @@ export default function TestBuilding({ position, scale, rotation }) {
     })
     const modleRef = useRef();
 
-    const { animations, materials, scene } = useGLTF("/modal/testModle/building/buildingAll/Building All.gltf")
+    const { animations, materials, scene } = useGLTF("/modal/test/Scene.gltf")
     const { actions } = useAnimations(animations, modleRef);
 
     const handleClick = (e) => {
@@ -22,37 +22,42 @@ export default function TestBuilding({ position, scale, rotation }) {
 
         console.log("clickName:", clickName);
 
-        let action;
-        if (clickName === "DA_820_FAN") action = actions["DA 820 FAN_Action"];
-        if (clickName === "DA_17K_System_Plane") action = actions["DA 17K System_PlaneAction"];
-        if (clickName === "DA_17K_System_Plane_2") action = actions["DA 17K System_PlaneAction_2"];
-        if (clickName === "DA_17K_System_Plane_3") action = actions["DA 17K System_PlaneAction_3"];
-        if (clickName === "DA_17K_System_Plane_4") action = actions["DA 17K System_PlaneAction_4"];
-        if (clickName === "DA_17K_System_Plane_5") action = actions["DA 17K System_PlaneAction_5"];
+        // let action;
+        // if (clickName === "DA_820_FAN") action = actions["DA 820 FAN_Action"];
+        // if (clickName === "DA_17K_System_Plane") action = actions["DA 17K System_PlaneAction"];
+        // if (clickName === "DA_17K_System_Plane_2") action = actions["DA 17K System_PlaneAction_2"];
+        // if (clickName === "DA_17K_System_Plane_3") action = actions["DA 17K System_PlaneAction_3"];
+        // if (clickName === "DA_17K_System_Plane_4") action = actions["DA 17K System_PlaneAction_4"];
+        // if (clickName === "DA_17K_System_Plane_5") action = actions["DA 17K System_PlaneAction_5"];
 
-        if (!action) return;
+        // if (!action) return;
 
-        action.reset()
-            .setLoop(THREE.LoopOnce)
-            .clampWhenFinished = true
+        // action.reset()
+        //     .setLoop(THREE.LoopOnce)
+        //     .clampWhenFinished = true
 
-        if (!s_isOpen[clickName]) {
-            action.time = 0; // 起始時間點
-            action.timeScale = 1; // 順軸進行
-            set_s_isOpen(prev => ({
-                ...prev,
-                [clickName]: true,
-            }))
+        // if (!s_isOpen[clickName]) {
+        //     action.time = 0; // 起始時間點
+        //     action.timeScale = 1; // 順軸進行
+        //     set_s_isOpen(prev => ({
+        //         ...prev,
+        //         [clickName]: true,
+        //     }))
+        // }
+        // else {
+        //     action.time = action.getClip().duration //getClip: 返回存有此AnimationClip; .ducration: 動畫總長度 ---> 終點時間點 
+        //     action.timeScale = -1 // 逆軸進行
+        //     set_s_isOpen(prev => ({
+        //         ...prev,
+        //         [clickName]: false,
+        //     }))
+        // }
+        // action.play(); // 順放or 倒放動畫
+        for (let actionAnimation in actions) {
+            // if (actionAnimation.includes("BF55")) actions[actionAnimation].play();
+            actions["example_mat"].play();
+
         }
-        else {
-            action.time = action.getClip().duration //getClip: 返回存有此AnimationClip; .ducration: 動畫總長度 ---> 終點時間點 
-            action.timeScale = -1 // 逆軸進行
-            set_s_isOpen(prev => ({
-                ...prev,
-                [clickName]: false,
-            }))
-        }
-        action.play(); // 順放or 倒放動畫
     }
 
 
@@ -63,8 +68,10 @@ export default function TestBuilding({ position, scale, rotation }) {
         console.log("object3D:", scene);
 
         if (Object.keys(actions).length > 0) {
+            console.log("有動畫")
             for (let actionAnimation in actions) {
-                if (actionAnimation.includes("BF55")) actions[actionAnimation].play();
+                // if (actionAnimation.includes("BF55")) actions[actionAnimation].play();
+                actions[actionAnimation].play();
 
             }
         }
@@ -78,7 +85,7 @@ export default function TestBuilding({ position, scale, rotation }) {
     return (
         <Gltf
             ref={modleRef}
-            src={"/modal/testModle/building/buildingAll/Building All.gltf"}
+            src={"/modal/test/Scene.gltf"}
             position={position}
             scale={scale}
             rotation={rotation}
