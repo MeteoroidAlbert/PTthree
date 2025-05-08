@@ -46,7 +46,7 @@ export default function ThreeScene() {
     }, [])
 
     return (
-        <div ref={divRef} className="relative w-full h-screen" >
+        <div ref={divRef} className="relative w-full h-screen overflow-hidden" >
             <AppUI /> {/* DOM UI 元件 */}
             <div className="w-full h-full">
                 <R3FCanvas eventSource={divRef} s_data={s_data} />

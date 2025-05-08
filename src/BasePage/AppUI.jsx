@@ -1,35 +1,81 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Drawer, Form, Input, InputNumber, Row, Slider, Space, Table } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
-import { RollbackOutlined } from "@ant-design/icons";
-import { reset_allState } from "../Redux/Slice/3Dslice";
+import { ConsoleSqlOutlined, RollbackOutlined } from "@ant-design/icons";
+import { reset_allState, change_s_camPosNTarget } from "../Redux/Slice/3Dslice";
 import LivestockEnergyChart from "../Component/LivestockEnergyChart";
+import Annotation from "../Model/annotation";
 
 const tableColumns_Evn = [
     {
         title: "畜舍/環境數據",
         dataIndex: "name",
         width: 130,
+        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
+        onHeaderCell: () => {
+            return {
+                style: {
+                    backgroundColor: "#2a6a85",
+                    color: "#fff",
+                },
+            };
+        },
     },
     {
         title: "二氧化碳",
         dataIndex: "CO2",
         width: 120,
+        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
+        onHeaderCell: () => {
+            return {
+                style: {
+                    backgroundColor: "#2a6a85",
+                    color: "#fff",
+                },
+            };
+        },
     },
     {
         title: "溫度(℃)",
         dataIndex: "temp",
         width: 120,
+        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
+        onHeaderCell: () => {
+            return {
+                style: {
+                    backgroundColor: "#2a6a85",
+                    color: "#fff",
+                },
+            };
+        },
     },
     {
         title: "濕度(%, RH)",
         dataIndex: "humidity",
         width: 120,
+        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
+        onHeaderCell: () => {
+            return {
+                style: {
+                    backgroundColor: "#2a6a85",
+                    color: "#fff",
+                },
+            };
+        },
     },
     {
         title: "噪音(dB)",
         dataIndex: "noise",
         width: 120,
+        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
+        onHeaderCell: () => {
+            return {
+                style: {
+                    backgroundColor: "#2a6a85",
+                    color: "#fff",
+                },
+            };
+        },
     }
 ]
 
@@ -58,31 +104,90 @@ const fakeData_Evn = [
 ]
 
 export default function AppUI() {
-    const { s_isFocus } = useSelector(state => state.three);
+    const { s_isFocus, s_focusTarget, s_annotation_b1 } = useSelector(state => state.three);
 
     const dispatch = useDispatch();
 
     return (
         <>
             {/* DOM元素 */}
-            <Space className="absolute top-0 right-0 z-[100] p-2 bg-white border border-solid rounded-md m-2">
+            {s_isFocus && (<Space className="absolute top-0 right-0 z-[100] p-2 m-2">
                 <Button
+                    className="bg-[#2a6a85] text-white"
                     onClick={() => dispatch(reset_allState())}
                 >
                     <RollbackOutlined />回到總覽
                 </Button>
-            </Space>
+            </Space>)}
             {!s_isFocus && (
                 <Table
-                    className={`absolute top-5 left-5 z-[100] bg-white border border-solid rounded-md animate-slide-left`}
+                    className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
                     columns={tableColumns_Evn}
                     dataSource={fakeData_Evn}
                     pagination={false}
+                    rowClassName={() => "hover:bg-[#6aa8bc]"}
                 />
             )}
             {!s_isFocus && (
-                <LivestockEnergyChart/>
+                <LivestockEnergyChart />
             )}
+            {s_isFocus && (
+                <Table
+                    className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
+                    columns={tableColumns_Evn}
+                    dataSource={fakeData_Evn.filter(x => {
+                        const target = s_focusTarget === "Building1"
+                            ? "雞舍"
+                            : s_focusTarget === "Building2"
+                                ? "豬舍"
+                                : s_focusTarget === "Building3"
+                                    ? "牛舍"
+                                    : null
+
+                        return x.name === target
+                    })}
+                    pagination={false}
+                    rowClassName={() => "hover:bg-[#6aa8bc]"}
+                />
+            )}
+            {
+                s_focusTarget === "Building1" && (
+                    <>
+                        <Annotation
+                            pinX={s_annotation_b1.fan?.x}
+                            pinY={s_annotation_b1.fan?.y}
+                            labelX={s_annotation_b1.fan?.x - 400}
+                            labelY={s_annotation_b1.fan?.y - 100}
+                            label={
+                                <div
+                                    className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
+                                    onClick={() => dispatch(change_s_camPosNTarget("fan_b1"))}
+                                >
+                                    風扇轉速: 300 rpm
+                                </div>
+                            }
+                        />
+                        <Annotation
+                            pinX={s_annotation_b1.blinds?.x}
+                            pinY={s_annotation_b1.blinds?.y}
+                            labelX={s_annotation_b1.blinds?.x - 300}
+                            labelY={s_annotation_b1.blinds?.y - 100}
+                            label={
+                                <div
+                                    className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
+                                    onClick={() => dispatch(change_s_camPosNTarget("blinds_b1"))}
+                                >
+                                    百葉窗
+                                </div>
+                            }
+                        />
+                    </>
+
+
+                )
+            }
+
+
 
         </>
     )

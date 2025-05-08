@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//相機位置與目標-----------------------------------------------------------> 0: cameraPosition, 1: orbitTarget
+//相機位置與目標------------------------------> 0: cameraPosition, 1: orbitTarget
 const positionTarget = {
     default: [[-180, 150, 250], [0, 0, 0]],
-    Building1: [[-40, 70, 120], [0, 0, 0]],
-    Building2: [[-40, 110, 120], [0, 40, 0]],
-    Building3: [[-40, 150, 120], [0, 80, 0]],
+    Building1: [[-100, 90, 200], [0, 0, 0]],
+    Building2: [[-100, 130, 200], [0, 40, 0]],
+    Building3: [[-100, 170, 200], [0, 80, 0]],
+    fan_b1: [[0, 20, -90], [0, 15, -130]],
+    blinds_b1: [[0, 10, 80], [-40, 10, 80]]
 };
 
 const initialState = {
@@ -32,7 +34,9 @@ const initialState = {
                 position: [0, 80, 0]
             }
         }
-    ]
+    ],
+    s_annotation_b1: {},
+
 }
 
 const threeDslice = createSlice({
@@ -59,7 +63,14 @@ const threeDslice = createSlice({
         },
         reset_allState(state, action) {
             return initialState;
-        }
+        },
+        change_s_annotation_b1(state, action) {
+            const { payload } = action
+            state.s_annotation_b1 = {
+                ...state.s_annotation_b1,
+                ...payload,
+            }
+        },
     }
 })
 
@@ -70,6 +81,8 @@ export const {
     change_s_isFocus,
     change_s_view1Component,
     reset_allState,
+    change_s_annotation_b1,
+    change_s_test,
 } = threeDslice.actions;
 
 export default threeDslice.reducer;

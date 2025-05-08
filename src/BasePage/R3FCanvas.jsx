@@ -8,7 +8,7 @@ export default function R3FCanvas({ eventSource, s_data }) {
   return (
     <>
       <SceneViews s_data={s_data}/>
-      <Canvas eventSource={eventSource} className="bg-[#b0c4de]">
+      <Canvas eventSource={eventSource} className="bg-[#011d2b]">
         <View.Port />
       </Canvas>
     </>

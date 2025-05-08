@@ -18,8 +18,23 @@ export default function ThirdPersonController({ cameraPosition, orbitTarget, s_i
     }
 
     useEffect(() => {
-        set_s_isAnimated(true);
+        const cam = cameraRef.current;
+        const ctrl = orbitControlsRef.current;
+        if (!cam || !ctrl) return;
+    
+        // 僅當相機位置真的「不同」時才啟用動畫
+        const positionChanged = cam.position.distanceTo(cameraPosition) > 0.1;
+        const targetChanged = ctrl.target.distanceTo(orbitTarget) > 0.1;
+    
+        if (positionChanged || targetChanged) {
+            set_s_isAnimated(true);
+        }
     }, [cameraPosition, orbitTarget]);
+    
+
+    useEffect(() => {
+        console.log("相機初始化!")
+    }, [])
 
     useFrame(() => {
         if (!s_isAnimated) return;

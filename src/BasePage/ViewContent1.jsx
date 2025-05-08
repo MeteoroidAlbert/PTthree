@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
-import { Environment, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { Environment, GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import ThirdPersonController from '../Model/Controls/ThirdPersonController';
 import TestBuilding from "../Model/Test_building";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,9 @@ import { componentMap } from "../util";
 export default function ViewContent1() {
     const { s_focusTarget, s_view1Component, s_camPos, s_camTarget } = useSelector(state => state.three);
 
+    const camPos = useMemo(() => new THREE.Vector3(...s_camPos), [s_camPos]);
+    const camTarget = useMemo(() => new THREE.Vector3(...s_camTarget), [s_camTarget]);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,6 +26,14 @@ export default function ViewContent1() {
             dispatch(change_s_camPosNTarget(s_focusTarget))
         }
     }, [s_focusTarget])
+
+    useEffect(() => {
+        console.log("view1 re-render")
+    }, [])
+
+    useEffect(() => {
+        console.log("camera:", s_camPos, s_camTarget)
+    }, [s_camPos, s_camTarget])
 
     return (
         <>
@@ -35,7 +46,7 @@ export default function ViewContent1() {
             />
             {/*環境貼圖------------------------------->關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
             <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
-
+            {/*3D物件*/}
             {s_view1Component.length > 0
                 && s_view1Component.map(({ name, props }, i) =>
                     <Suspense fallback={null}>
@@ -43,10 +54,11 @@ export default function ViewContent1() {
                     </Suspense>
                 )
             }
+
             {/*相機*/}
             <ThirdPersonController
-                cameraPosition={new THREE.Vector3(...s_camPos)}
-                orbitTarget={new THREE.Vector3(...s_camTarget)}
+                cameraPosition={camPos}
+                orbitTarget={camTarget}
             />
             {/*坐標軸*/}
             <primitive object={new THREE.AxesHelper(1000)} />

@@ -6,21 +6,42 @@ const LivestockEnergyChart = () => {
     const options = {
         chart: {
             type: 'column',
+            backgroundColor: "#173e5e",
+
         },
         title: {
             text: '當週畜舍每日用電量',
+            style: {
+                color: "#ffffff"
+            }
         },
         subtitle: {
             text: '單位：kWh',
+            style: {
+                color: "#ffffff"
+            }
         },
         xAxis: {
             categories: ['週一', '週二', '週三', '週四', '週五', '週六', '週日'],
             crosshair: true,
+            labels: {
+                style: {
+                    color: '#ffffff',
+                },
+            },
         },
         yAxis: {
             min: 0,
             title: {
                 text: '用電量 (kWh)',
+                style: {
+                    color: "#ffffff"
+                }
+            },
+            labels: {
+                style: {
+                    color: '#ffffff',
+                },
             },
         },
         tooltip: {
@@ -38,6 +59,7 @@ const LivestockEnergyChart = () => {
                 name: '雞舍',
                 data: [120, 130, 125, 140, 138, 150, 145],
                 color: '#f39c12',
+                
             },
             {
                 name: '豬舍',
@@ -49,11 +71,21 @@ const LivestockEnergyChart = () => {
                 data: [200, 210, 205, 220, 215, 230, 225],
                 color: '#2980b9',
             },
+            
         ],
+        legend: {
+            itemStyle: {
+                color: '#ffffff',
+            },
+        },
+        credits: {
+            enabled: false,
+        },
+        
     };
 
     return (
-        <div className="p-4 bg-white border rounded-md shadow-md absolute bottom-5 left-5 z-[100] w-[600px] animate-slide-left">
+        <div className="p-4 bg-[#173e5e] border rounded-md shadow-md absolute bottom-5 left-5 z-[100] w-[600px] animate-slide-left opacity-90">
             <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
     );
