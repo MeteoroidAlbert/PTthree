@@ -191,7 +191,7 @@ export default function AppUI() {
                             label={
                                 <div
                                     className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
-                                    onClick={() => dispatch(change_s_camPosNTarget("blinds_b1"))}
+                                    onClick={() => dispatch(change_s_camPosNTarget("exhaust_b1"))}
                                 >
                                     通風管道
                                 </div>
