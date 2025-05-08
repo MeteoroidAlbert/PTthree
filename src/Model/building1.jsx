@@ -10,7 +10,8 @@ import Pin from './pin';
 
 const annotationPoints = [
     { id: "fan", position: new THREE.Vector3(-13, 22, -130) },
-    { id: "blinds", position: new THREE.Vector3(-40, 10, 80) }
+    { id: "blinds", position: new THREE.Vector3(-40, 10, 80) },
+    { id: "exhaust", position: new THREE.Vector3(40, 10, 0) }
 ]
 
 
@@ -156,7 +157,6 @@ export default function Building1({ position, scale, rotation }) {
     return (
         <group ref={modelRef} position={position} scale={scale} rotation={rotation}>
             <Gltf src="/modal/b1/scene.gltf" position={[0, 0, 0]} onClick={handleClick} />
-
         </group>
     );
 }

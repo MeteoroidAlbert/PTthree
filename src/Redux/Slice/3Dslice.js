@@ -7,7 +7,8 @@ const positionTarget = {
     Building2: [[-100, 130, 200], [0, 40, 0]],
     Building3: [[-100, 170, 200], [0, 80, 0]],
     fan_b1: [[0, 20, -90], [0, 15, -130]],
-    blinds_b1: [[0, 10, 80], [-40, 10, 80]]
+    blinds_b1: [[0, 10, 80], [-40, 10, 80]],
+    exhaust_b1: [[], [40, 10, 0]]
 };
 
 const initialState = {

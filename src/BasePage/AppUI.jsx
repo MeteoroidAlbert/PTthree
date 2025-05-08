@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ConsoleSqlOutlined, RollbackOutlined } from "@ant-design/icons";
 import { reset_allState, change_s_camPosNTarget } from "../Redux/Slice/3Dslice";
 import LivestockEnergyChart from "../Component/LivestockEnergyChart";
-import Annotation from "../Model/annotation";
+import Annotation from "../Component/annotation";
 
 const tableColumns_Evn = [
     {
@@ -110,7 +110,7 @@ export default function AppUI() {
 
     return (
         <>
-            {/* DOM元素 */}
+            {/* UI 測試區 */}
             {s_isFocus && (<Space className="absolute top-0 right-0 z-[100] p-2 m-2">
                 <Button
                     className="bg-[#2a6a85] text-white"
@@ -119,6 +119,7 @@ export default function AppUI() {
                     <RollbackOutlined />回到總覽
                 </Button>
             </Space>)}
+            {/* 表格數據 測試區 */}
             {!s_isFocus && (
                 <Table
                     className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
@@ -150,20 +151,21 @@ export default function AppUI() {
                     rowClassName={() => "hover:bg-[#6aa8bc]"}
                 />
             )}
+            {/*annotation 測試區*/}
             {
                 s_focusTarget === "Building1" && (
                     <>
                         <Annotation
                             pinX={s_annotation_b1.fan?.x}
                             pinY={s_annotation_b1.fan?.y}
-                            labelX={s_annotation_b1.fan?.x - 400}
+                            labelX={s_annotation_b1.fan?.x - 250}
                             labelY={s_annotation_b1.fan?.y - 100}
                             label={
                                 <div
                                     className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
                                     onClick={() => dispatch(change_s_camPosNTarget("fan_b1"))}
                                 >
-                                    風扇轉速: 300 rpm
+                                    風扇
                                 </div>
                             }
                         />
@@ -178,6 +180,20 @@ export default function AppUI() {
                                     onClick={() => dispatch(change_s_camPosNTarget("blinds_b1"))}
                                 >
                                     百葉窗
+                                </div>
+                            }
+                        />
+                        <Annotation
+                            pinX={s_annotation_b1.exhaust?.x}
+                            pinY={s_annotation_b1.exhaust?.y}
+                            labelX={s_annotation_b1.exhaust?.x + 300}
+                            labelY={s_annotation_b1.exhaust?.y - 100}
+                            label={
+                                <div
+                                    className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
+                                    onClick={() => dispatch(change_s_camPosNTarget("blinds_b1"))}
+                                >
+                                    通風管道
                                 </div>
                             }
                         />
