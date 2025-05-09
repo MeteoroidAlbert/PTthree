@@ -50,10 +50,12 @@ const threeDslice = createSlice({
             state.s_camPos = positionTarget[payload][0];
             state.s_camTarget = positionTarget[payload][1];
 
-            if (payload.includes("Building")) state.s_focusTargetMain = action.payload;
+            if (payload.includes("Building")) {
+                state.s_focusTargetMain = action.payload;
+                state.s_focusTargetSub = undefined
+            } 
             else {
-                if (payload === "default") state.s_focusTargetSub = undefined;
-                else state.s_focusTargetSub = action.payload;
+                state.s_focusTargetSub = action.payload;
             } 
             
         },

@@ -19,20 +19,38 @@ export default function AppUI() {
     return (
         <>
             {/* UI 測試區 */}
-            {s_isFocus && (<Space className="absolute top-0 right-0 z-[100] p-2 m-2">
-                <Button
-                    className="bg-[#2a6a85] text-white"
-                    onClick={() => dispatch(reset_allState())}
-                >
-                    <HomeOutlined />回到總覽
-                </Button>
-                <Button
-                    className="bg-[#2a6a85] text-white"
-                    onClick={() => dispatch(change_s_camPosNTarget("default"))}
-                >
-                    <RollbackOutlined />重置鏡頭
-                </Button>
-            </Space>)}
+            {s_isFocus && (
+                <div className="max-w-1/5 absolute top-5 right-5 z-[100] flex p-2 justify-between gap-2  bg-[#173e5e] border border-white rounded-md">
+                    <div className="text-white flex justify-center items-center text-4xl">
+                        {
+                        s_focusTargetMain === "Building1" 
+                            ? "雞舍"
+                            : s_focusTargetMain === "Building2" 
+                                ? "豬舍"
+                                : s_focusTargetMain === "Building3"
+                                    ? "牛舍"
+                                    : "" 
+                        }
+                    </div>
+                    <Space>
+                        <Button
+                            className="bg-[#2a6a85] text-white"
+                            onClick={() => dispatch(reset_allState())}
+                        >
+                            <HomeOutlined />全局總覽
+                        </Button>
+                        {s_focusTargetSub && (
+                            <Button
+                                className="bg-[#2a6a85] text-white"
+                                onClick={() => dispatch(change_s_camPosNTarget(s_focusTargetMain))}
+                            >
+                                <RollbackOutlined />局部總覽
+                            </Button>
+                        )}
+
+                    </Space>
+                </div>
+            )}
             {/* 表格數據 測試區 */}
             {!s_isFocus && (
                 <>
@@ -44,7 +62,7 @@ export default function AppUI() {
                         rowClassName={() => "hover:bg-[#6aa8bc]"}
                     />
                     <LivestockEnergy className="absolute bottom-5 left-5 z-[100] animate-slide-left" />
-                    <LivestockTemp className="absolute bottom-[15vh] right-5 z-[100] animate-slide-right" />
+                    <LivestockTemp className="absolute bottom-[25vh] right-5 z-[100] animate-slide-right" />
                 </>
 
             )}
@@ -69,14 +87,14 @@ export default function AppUI() {
             )}
             {s_focusTargetSub === "fan_b1" && (
                 <>
-                    <FanSpeed className="absolute top-[7vh] right-5 z-[100] animate-slide-right"/>
+                    <FanSpeed className="absolute top-[9vh] right-5 z-[100] animate-slide-right" />
                 </>
 
             )}
             {
                 (s_focusTargetMain === "Building1" && !s_focusTargetSub) && (
                     <>
-                        <LivestockTemp className="absolute top-[7vh] right-5 z-[100] animate-slide-right" />
+                        <LivestockTemp className="absolute top-[9vh] right-5 z-[100] animate-slide-right" />
                         <Energy_b1 className="absolute bottom-5 left-5 z-[100] animate-slide-left" />
                     </>
                 )
