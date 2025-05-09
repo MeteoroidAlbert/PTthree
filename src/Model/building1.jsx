@@ -7,7 +7,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { change_s_isFocus, change_s_focusTarget, change_s_view1Component, change_s_annotation_b1 } from '../Redux/Slice/3Dslice';
 import Pin from './pin';
 
-// Annotation Pins的位置(hint: Anno Pin就是屏幕上看到的各個標記白點，這個3D位置的初始值需要被紀錄，隨後再轉換成屏幕DOM元素該顯示的位置)
+// Annotation Pins的位置(hint: Anno Pin就是屏幕上看到的各個標記白點，這個3D位置的初始值需要被紀錄，隨後再轉換成屏幕DOM元素該顯示的位置)(待改: 以後應該會有更好的寫法)
 const annotationPoints = [
     { id: "fan", position: new THREE.Vector3(-13, 22, -130) },
     { id: "blinds", position: new THREE.Vector3(-40, 10, 80) },
@@ -16,8 +16,8 @@ const annotationPoints = [
 
 
 export default function Building1({ position, scale, rotation }) {
-    const [s_shouldUnMount, set_s_shouldUnMount] = useState(false); // ------> 判斷元件本身是否該被卸載
-    const [s_isOpen, set_s_isOpen] = useState({ // --------------------------> 判斷模型上自控動畫啟動與否
+    const [s_shouldUnMount, set_s_shouldUnMount] = useState(false); // -------------> 判斷元件本身是否該被卸載
+    const [s_isOpen, set_s_isOpen] = useState({ // ---------------------------------> 判斷模型上自控動畫啟動與否
         "DA_820_FAN": false,
         "DA_17K_System_Plane": false,
         "DA_17K_System_Plane_2": false,
@@ -40,7 +40,7 @@ export default function Building1({ position, scale, rotation }) {
     // 建立動畫、效果參數
     const { opacity } = useSpring({ 
         opacity: !s_isFocus || s_focusTarget === "Building1" ? 1 : 0.5,
-        config: { tension: 120, friction: 20 } // 動畫參數: tension: 動畫快慢; friction: 動畫慢停(hint: 想成摩擦力)
+        config: { tension: 120, friction: 20 } //----------------------------------> 動畫參數: tension: 動畫快慢; friction: 動畫慢停(hint: 想成摩擦力)
     });
 
     // 每幀處理內容
@@ -100,7 +100,8 @@ export default function Building1({ position, scale, rotation }) {
 
     // 點擊事件
     const handleClick = (e) => {
-        e.stopPropagation(); // 阻止冒泡觸發父元件事件
+        // 阻止冒泡觸發父元件事件
+        e.stopPropagation(); 
 
         // 1. 決定應該觸發的內容:
         // 1.1 s_isFocus為true時，表示當前視角聚焦在單一畜舍上，可以觸發額外動畫等互動
