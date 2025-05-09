@@ -16,6 +16,7 @@ import { componentMap } from "../util";
 export default function ViewContent1() {
     const { s_focusTarget, s_view1Component, s_camPos, s_camTarget } = useSelector(state => state.three);
 
+    // debug: s_camPos, s_camTarget不可直接傳遞給ThirdPersonController使用，以避免該相機位置、目標背錯誤鎖死
     const camPos = useMemo(() => new THREE.Vector3(...s_camPos), [s_camPos]);
     const camTarget = useMemo(() => new THREE.Vector3(...s_camTarget), [s_camTarget]);
 
@@ -26,14 +27,6 @@ export default function ViewContent1() {
             dispatch(change_s_camPosNTarget(s_focusTarget))
         }
     }, [s_focusTarget])
-
-    useEffect(() => {
-        console.log("view1 re-render")
-    }, [])
-
-    useEffect(() => {
-        console.log("camera:", s_camPos, s_camTarget)
-    }, [s_camPos, s_camTarget])
 
     return (
         <>
@@ -60,7 +53,7 @@ export default function ViewContent1() {
                 cameraPosition={camPos}
                 orbitTarget={camTarget}
             />
-            {/*坐標軸*/}
+            {/*坐標軸 && 輔助器*/}
             <primitive object={new THREE.AxesHelper(1000)} />
             <GizmoHelper
                 alignment="bottom-right" // 在畫布上的位置

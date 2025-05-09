@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "5.x",
     "@react-spring/three": "^9.7.5",
+    "@react-spring/web": "^9.7.5",
     "@react-three/csg": "^4.0.0",
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",

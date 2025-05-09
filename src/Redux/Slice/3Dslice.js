@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//相機位置與目標------------------------------> 0: cameraPosition, 1: orbitTarget
+//相機位置與目標 [0: cameraPosition; 1: orbitTarget]
 const positionTarget = {
     default: [[-180, 150, 250], [0, 0, 0]],
     Building1: [[-100, 90, 200], [0, 0, 0]],
@@ -12,11 +12,11 @@ const positionTarget = {
 };
 
 const initialState = {
-    s_camPos: positionTarget.default[0],
-    s_camTarget: positionTarget.default[1],
-    s_focusTarget: undefined,
-    s_isFocus: false,
-    s_view1Component: [
+    s_camPos: positionTarget.default[0], // -------------> 相機位置: Array
+    s_camTarget: positionTarget.default[1], // ----------> 相機目標位置(看向的目標位置): Array
+    s_focusTarget: undefined,   // ----------------------> 相機正在聚焦的目標: String
+    s_isFocus: false, // --------------------------------> 聚焦與否: boolean
+    s_view1Component: [ // ------------------------------> 渲染元件: [Object]
         {
             name: "Building1",
             props: {
@@ -36,8 +36,8 @@ const initialState = {
             }
         }
     ],
-    s_annotation_b1: {},
-
+    s_annotation_b1: {}, // -----------------------------> Building1元件內部要放置annotation pin的位置
+    
 }
 
 const threeDslice = createSlice({
@@ -57,13 +57,11 @@ const threeDslice = createSlice({
         change_s_view1Component: (state, action) => {
             const payload = action.payload;
             if (typeof payload === "function") {
-                state.s_view1Component = payload(state.s_view1Component);  // 在reducer直接拿取最新的state處理，避免競爭錯誤
+                // 在reducer直接拿取最新的state處理，避免同步多地調用時，拿到錯誤的state資料
+                state.s_view1Component = payload(state.s_view1Component);  
             } else {
                 state.s_view1Component = payload;
             }
-        },
-        reset_allState(state, action) {
-            return initialState;
         },
         change_s_annotation_b1(state, action) {
             const { payload } = action
@@ -71,6 +69,9 @@ const threeDslice = createSlice({
                 ...state.s_annotation_b1,
                 ...payload,
             }
+        },
+        reset_allState(state, action) {
+            return initialState;
         },
     }
 })
@@ -81,9 +82,9 @@ export const {
     change_s_focusTarget,
     change_s_isFocus,
     change_s_view1Component,
-    reset_allState,
     change_s_annotation_b1,
-    change_s_test,
+    reset_allState,
 } = threeDslice.actions;
+
 
 export default threeDslice.reducer;

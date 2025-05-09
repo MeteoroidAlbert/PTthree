@@ -158,8 +158,6 @@ export default function AppUI() {
                         <Annotation
                             pinX={s_annotation_b1.fan?.x}
                             pinY={s_annotation_b1.fan?.y}
-                            labelX={s_annotation_b1.fan?.x - 250}
-                            labelY={s_annotation_b1.fan?.y - 100}
                             label={
                                 <div
                                     className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
@@ -172,8 +170,6 @@ export default function AppUI() {
                         <Annotation
                             pinX={s_annotation_b1.blinds?.x}
                             pinY={s_annotation_b1.blinds?.y}
-                            labelX={s_annotation_b1.blinds?.x - 300}
-                            labelY={s_annotation_b1.blinds?.y - 100}
                             label={
                                 <div
                                     className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
@@ -186,8 +182,6 @@ export default function AppUI() {
                         <Annotation
                             pinX={s_annotation_b1.exhaust?.x}
                             pinY={s_annotation_b1.exhaust?.y}
-                            labelX={s_annotation_b1.exhaust?.x + 300}
-                            labelY={s_annotation_b1.exhaust?.y - 100}
                             label={
                                 <div
                                     className="cursor-pointer p-2 bg-[#2a6a85] text-white rounded-md p-2 text-2xl border border-white"
