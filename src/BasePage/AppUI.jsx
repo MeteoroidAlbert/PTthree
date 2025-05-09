@@ -44,7 +44,7 @@ export default function AppUI() {
                         rowClassName={() => "hover:bg-[#6aa8bc]"}
                     />
                     <LivestockEnergy className="absolute bottom-5 left-5 z-[100] animate-slide-left" />
-                    <LivestockTemp className="absolute bottom-5 right-5 z-[100] animate-slide-right" />
+                    <LivestockTemp className="absolute bottom-[15vh] right-5 z-[100] animate-slide-right" />
                 </>
 
             )}

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 const Energy_b1 = ({ className }) => {
-    const options = {
+    const [s_ops, set_s_ops] = useState({
         chart: {
             type: 'column',
             backgroundColor: '#173e5e',
@@ -73,11 +73,13 @@ const Energy_b1 = ({ className }) => {
             },
         ],
         credits: { enabled: false },
-    };
+    })
+
+    // const options = ;
 
     return (
         <div className={`p-4 bg-[#173e5e] border rounded-md shadow-md w-[600px] opacity-90 ${className}`}>
-            <HighchartsReact highcharts={Highcharts} options={options} />
+            <HighchartsReact highcharts={Highcharts} options={s_ops} />
         </div>
     );
 };

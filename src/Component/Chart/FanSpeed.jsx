@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useSelector } from 'react-redux';
 
 const FanSpeed = ({ className }) => {
     const { s_focusTargetMain } = useSelector(state => state.three);
+
     const seriesData = useMemo(() => {
         const dataArr = [
             {
@@ -27,7 +28,8 @@ const FanSpeed = ({ className }) => {
         else return dataArr;
     }, [s_focusTargetMain])
 
-    const options = {
+
+    const [s_options, set_s_options] = useState({
         chart: {
             type: 'line',
             backgroundColor: '#173e5e',
@@ -59,12 +61,35 @@ const FanSpeed = ({ className }) => {
             itemStyle: { color: '#ffffff' },
         },
         credits: { enabled: false },
-        series: seriesData,
-    };
+        series: [
+            {
+                name: '雞舍',
+                data: [1200, 1250, 1230, 1280, 1300, 1340, 1320],
+                color: '#f39c12',
+            },
+            {
+                name: '豬舍',
+                data: [1100, 1150, 1170, 1190, 1210, 1240, 1225],
+                color: '#27ae60',
+            },
+            {
+                name: '牛舍',
+                data: [1050, 1080, 1100, 1120, 1140, 1170, 1150],
+                color: '#2980b9',
+            },
+        ],
+    })
+
+    useEffect(() => {
+            set_s_options(prev => ({
+                ...prev,
+                series: seriesData
+            }))
+        }, [s_focusTargetMain])
 
     return (
         <div className={`p-4 bg-[#173e5e] border rounded-md shadow-md w-[600px] opacity-90 ${className}`}>
-            <HighchartsReact highcharts={Highcharts} options={options} />
+            <HighchartsReact highcharts={Highcharts} options={s_options} />
         </div>
     );
 };

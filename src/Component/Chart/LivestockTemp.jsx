@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 const LivestockTemp = ({className}) => {
     const { s_focusTargetMain } = useSelector(state => state.three);
+
     const seriesData = useMemo(() => {
         const dataArr = [
             {
