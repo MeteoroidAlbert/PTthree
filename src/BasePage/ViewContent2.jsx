@@ -26,7 +26,8 @@ export default function ViewContent2() {
             <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
             {/* 3D物件 */}
             <Box position={[0, 0, 0]} args={[3, 0.5, 6]} />
-            <Box position={[0, 1, 0]} args={[3, 0.5, 6]} />
+            <Box position={[0, 0.8, 0]} args={[3, 0.5, 6]} />
+            <Box position={[0, 1.6, 0]} args={[3, 0.5, 6]} />
             {/* 相機 */}
             <OrbitControls makeDefault />
             {/* <PerspectiveCamera makeDefault/> */}

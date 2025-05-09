@@ -19,19 +19,19 @@ export default function AppUI() {
     return (
         <>
             {/* UI 測試區 */}
-            {s_isFocus && (
-                <div className="max-w-1/5 absolute top-5 right-5 z-[100] flex p-2 justify-between gap-2  bg-[#173e5e] border border-white rounded-md">
-                    <div className="text-white flex justify-center items-center text-4xl">
-                        {
-                        s_focusTargetMain === "Building1" 
+            <div className="max-w-1/5 absolute top-5 right-5 z-[100] flex p-2 justify-between gap-2  bg-[#173e5e] border border-white rounded-md">
+                <div className="text-white flex justify-center items-center text-4xl">
+                    {
+                        s_focusTargetMain === "Building1"
                             ? "雞舍"
-                            : s_focusTargetMain === "Building2" 
+                            : s_focusTargetMain === "Building2"
                                 ? "豬舍"
                                 : s_focusTargetMain === "Building3"
                                     ? "牛舍"
-                                    : "" 
-                        }
-                    </div>
+                                    : "畜舍總覽"
+                    }
+                </div>
+                {s_isFocus && (
                     <Space>
                         <Button
                             className="bg-[#2a6a85] text-white"
@@ -49,8 +49,8 @@ export default function AppUI() {
                         )}
 
                     </Space>
-                </div>
-            )}
+                )}
+            </div>
             {/* 表格數據 測試區 */}
             {!s_isFocus && (
                 <>
