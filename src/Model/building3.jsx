@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { change_s_isFocus, change_s_focusTarget, change_s_view1Component } from '../Redux/Slice/3Dslice';
+import { change_s_isFocus, change_s_camPosNTarget, change_s_view1Component } from '../Redux/Slice/3Dslice';
 
 export default function Building3({ position, scale, rotation }) {
     const [s_shouldUnMount, set_s_shouldUnMount] = useState(false);
-    const { s_isFocus, s_focusTarget, s_view1Component } = useSelector(state => state.three);
+    const { s_isFocus, s_focusTargetMain, s_view1Component } = useSelector(state => state.three);
 
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ export default function Building3({ position, scale, rotation }) {
     const { actions } = useAnimations(animations, modelRef);
 
     const { opacity } = useSpring({
-        opacity: !s_isFocus || s_focusTarget === "Building3" ? 1 : 0.5,
+        opacity: !s_isFocus || s_focusTargetMain === "Building3" ? 1 : 0.5,
         config: { tension: 120, friction: 20 }
     });
 
@@ -73,7 +73,7 @@ export default function Building3({ position, scale, rotation }) {
             action.play();
         } else {
             dispatch(change_s_isFocus(true));
-            dispatch(change_s_focusTarget("Building3"));
+            dispatch(change_s_camPosNTarget("Building3"));
         }
     };
 

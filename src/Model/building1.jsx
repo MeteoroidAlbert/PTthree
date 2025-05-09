@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
-import { change_s_isFocus, change_s_focusTarget, change_s_view1Component, change_s_annotation_b1 } from '../Redux/Slice/3Dslice';
+import { change_s_isFocus, change_s_camPosNTarget, change_s_view1Component, change_s_annotation_b1 } from '../Redux/Slice/3Dslice';
 import Pin from './pin';
 
 // Annotation Pins的位置(hint: Anno Pin就是屏幕上看到的各個標記白點，這個3D位置的初始值需要被紀錄，隨後再轉換成屏幕DOM元素該顯示的位置)(待改: 以後應該會有更好的寫法)
@@ -25,7 +25,7 @@ export default function Building1({ position, scale, rotation }) {
         "DA_17K_System_Plane_4": false,
         "DA_17K_System_Plane_5": false,
     });
-    const { s_isFocus, s_focusTarget, s_annotation_b1 } = useSelector(state => state.three);
+    const { s_isFocus, s_focusTargetMain, s_annotation_b1 } = useSelector(state => state.three);
 
     const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ export default function Building1({ position, scale, rotation }) {
 
     // 建立動畫、效果參數
     const { opacity } = useSpring({ 
-        opacity: !s_isFocus || s_focusTarget === "Building1" ? 1 : 0.5,
+        opacity: !s_isFocus || s_focusTargetMain === "Building1" ? 1 : 0.5,
         config: { tension: 120, friction: 20 } //----------------------------------> 動畫參數: tension: 動畫快慢; friction: 動畫慢停(hint: 想成摩擦力)
     });
 
@@ -133,7 +133,7 @@ export default function Building1({ position, scale, rotation }) {
         // 1.2 s_isFocus為false時，應該使視角聚焦到單一畜舍上
         else {
             dispatch(change_s_isFocus(true));
-            dispatch(change_s_focusTarget("Building1"));
+            dispatch(change_s_camPosNTarget("Building1"));
         }
     };
 

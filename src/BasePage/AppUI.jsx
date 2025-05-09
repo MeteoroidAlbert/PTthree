@@ -1,110 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Drawer, Form, Input, InputNumber, Row, Slider, Space, Table } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
-import { ConsoleSqlOutlined, RollbackOutlined } from "@ant-design/icons";
+import { ConsoleSqlOutlined, HomeOutlined, RollbackOutlined } from "@ant-design/icons";
 import { reset_allState, change_s_camPosNTarget } from "../Redux/Slice/3Dslice";
-import LivestockEnergyChart from "../Component/LivestockEnergyChart";
 import Annotation from "../Component/annotation";
-
-const tableColumns_Evn = [
-    {
-        title: "畜舍/環境數據",
-        dataIndex: "name",
-        width: 130,
-        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
-        onHeaderCell: () => {
-            return {
-                style: {
-                    backgroundColor: "#2a6a85",
-                    color: "#fff",
-                },
-            };
-        },
-    },
-    {
-        title: "二氧化碳",
-        dataIndex: "CO2",
-        width: 120,
-        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
-        onHeaderCell: () => {
-            return {
-                style: {
-                    backgroundColor: "#2a6a85",
-                    color: "#fff",
-                },
-            };
-        },
-    },
-    {
-        title: "溫度(℃)",
-        dataIndex: "temp",
-        width: 120,
-        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
-        onHeaderCell: () => {
-            return {
-                style: {
-                    backgroundColor: "#2a6a85",
-                    color: "#fff",
-                },
-            };
-        },
-    },
-    {
-        title: "濕度(%, RH)",
-        dataIndex: "humidity",
-        width: 120,
-        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
-        onHeaderCell: () => {
-            return {
-                style: {
-                    backgroundColor: "#2a6a85",
-                    color: "#fff",
-                },
-            };
-        },
-    },
-    {
-        title: "噪音(dB)",
-        dataIndex: "noise",
-        width: 120,
-        onCell: () => ({ className: "bg-[#173e5e] text-white" }),
-        onHeaderCell: () => {
-            return {
-                style: {
-                    backgroundColor: "#2a6a85",
-                    color: "#fff",
-                },
-            };
-        },
-    }
-]
-
-const fakeData_Evn = [
-    {
-        name: "雞舍",
-        CO2: "900ppm",
-        temp: "24",
-        humidity: "65",
-        noise: "61",
-    },
-    {
-        name: "豬舍",
-        CO2: "1200ppm",
-        temp: "21",
-        humidity: "68",
-        noise: "62",
-    },
-    {
-        name: "牛舍",
-        CO2: "1200ppm",
-        temp: "25",
-        humidity: "67",
-        noise: "58",
-    },
-]
+import { fakeData_Evn } from "../FakeData/data";
+import { tableColumns_Evn } from "../FakeData/columns";
+import LivestockEnergy from "../Component/Chart/LivestockEnergy";
+import LivestockTemp from "../Component/Chart/LivestockTemp";
+import Energy_b1 from "../Component/Chart/Energy_b1";
+import FanSpeed from "../Component/Chart/FanSpeed";
 
 export default function AppUI() {
-    const { s_isFocus, s_focusTarget, s_annotation_b1 } = useSelector(state => state.three);
+    const { s_isFocus, s_focusTargetMain, s_annotation_b1, s_focusTargetSub } = useSelector(state => state.three);
 
     const dispatch = useDispatch();
 
@@ -116,32 +24,40 @@ export default function AppUI() {
                     className="bg-[#2a6a85] text-white"
                     onClick={() => dispatch(reset_allState())}
                 >
-                    <RollbackOutlined />回到總覽
+                    <HomeOutlined />回到總覽
+                </Button>
+                <Button
+                    className="bg-[#2a6a85] text-white"
+                    onClick={() => dispatch(change_s_camPosNTarget("default"))}
+                >
+                    <RollbackOutlined />重置鏡頭
                 </Button>
             </Space>)}
             {/* 表格數據 測試區 */}
             {!s_isFocus && (
-                <Table
-                    className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
-                    columns={tableColumns_Evn}
-                    dataSource={fakeData_Evn}
-                    pagination={false}
-                    rowClassName={() => "hover:bg-[#6aa8bc]"}
-                />
-            )}
-            {!s_isFocus && (
-                <LivestockEnergyChart />
+                <>
+                    <Table
+                        className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
+                        columns={tableColumns_Evn}
+                        dataSource={fakeData_Evn}
+                        pagination={false}
+                        rowClassName={() => "hover:bg-[#6aa8bc]"}
+                    />
+                    <LivestockEnergy className="absolute bottom-5 left-5 z-[100] animate-slide-left" />
+                    <LivestockTemp className="absolute bottom-5 right-5 z-[100] animate-slide-right" />
+                </>
+
             )}
             {s_isFocus && (
                 <Table
                     className="absolute top-5 left-5 z-[100] border border-solid rounded-md animate-slide-left bg-white opacity-90"
                     columns={tableColumns_Evn}
                     dataSource={fakeData_Evn.filter(x => {
-                        const target = s_focusTarget === "Building1"
+                        const target = s_focusTargetMain === "Building1"
                             ? "雞舍"
-                            : s_focusTarget === "Building2"
+                            : s_focusTargetMain === "Building2"
                                 ? "豬舍"
-                                : s_focusTarget === "Building3"
+                                : s_focusTargetMain === "Building3"
                                     ? "牛舍"
                                     : null
 
@@ -151,9 +67,23 @@ export default function AppUI() {
                     rowClassName={() => "hover:bg-[#6aa8bc]"}
                 />
             )}
+            {s_focusTargetSub === "fan_b1" && (
+                <>
+                    <FanSpeed className="absolute top-[7vh] right-5 z-[100] animate-slide-right"/>
+                </>
+
+            )}
+            {
+                (s_focusTargetMain === "Building1" && !s_focusTargetSub) && (
+                    <>
+                        <LivestockTemp className="absolute top-[7vh] right-5 z-[100] animate-slide-right" />
+                        <Energy_b1 className="absolute bottom-5 left-5 z-[100] animate-slide-left" />
+                    </>
+                )
+            }
             {/*annotation 測試區*/}
             {
-                s_focusTarget === "Building1" && (
+                s_focusTargetMain === "Building1" && (
                     <>
                         <Annotation
                             pinX={s_annotation_b1.fan?.x}

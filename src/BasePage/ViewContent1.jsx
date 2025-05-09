@@ -14,19 +14,11 @@ import { componentMap } from "../util";
 
 
 export default function ViewContent1() {
-    const { s_focusTarget, s_view1Component, s_camPos, s_camTarget } = useSelector(state => state.three);
+    const { s_focusTargetMain, s_view1Component, s_camPos, s_camTarget } = useSelector(state => state.three);
 
     // debug: s_camPos, s_camTarget不可直接傳遞給ThirdPersonController使用，以避免該相機位置、目標背錯誤鎖死
     const camPos = useMemo(() => new THREE.Vector3(...s_camPos), [s_camPos]);
     const camTarget = useMemo(() => new THREE.Vector3(...s_camTarget), [s_camTarget]);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (s_focusTarget) {
-            dispatch(change_s_camPosNTarget(s_focusTarget))
-        }
-    }, [s_focusTarget])
 
     return (
         <>
