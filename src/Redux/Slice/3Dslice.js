@@ -38,7 +38,9 @@ const initialState = {
         }
     ],
     s_annotation_b1: {}, // -----------------------------> Building1元件內部要放置annotation pin的位置
-    
+    s_camPos_view2: [-180, 150, 250],
+    s_camTarget_view2: [0, 0, 0],
+
 }
 
 const threeDslice = createSlice({
@@ -46,37 +48,42 @@ const threeDslice = createSlice({
     initialState,
     reducers: {
         change_s_camPosNTarget(state, action) {
-            const payload = action.payload 
+            const { payload } = action;
             state.s_camPos = positionTarget[payload][0];
             state.s_camTarget = positionTarget[payload][1];
 
             if (payload.includes("Building")) {
-                state.s_focusTargetMain = action.payload;
+                state.s_focusTargetMain = payload;
                 state.s_focusTargetSub = undefined
-            } 
+            }
             else {
-                state.s_focusTargetSub = action.payload;
-            } 
-            
+                state.s_focusTargetSub = payload;
+            }
+
         },
         change_s_isFocus(state, action) {
             state.s_isFocus = action.payload;
         },
         change_s_view1Component: (state, action) => {
-            const payload = action.payload;
+            const { payload } = action;
             if (typeof payload === "function") {
                 // 在reducer直接拿取最新的state處理，避免同步多地調用時，拿到錯誤的state資料
-                state.s_view1Component = payload(state.s_view1Component);  
+                state.s_view1Component = payload(state.s_view1Component);
             } else {
                 state.s_view1Component = payload;
             }
         },
         change_s_annotation_b1(state, action) {
-            const { payload } = action
+            const { payload } = action;
             state.s_annotation_b1 = {
                 ...state.s_annotation_b1,
                 ...payload,
             }
+        },
+        change_s_camPosNTarget_view2(state, action) {
+            const { payload } = action;
+            state.s_camPos_view2 = payload.position;
+            state.s_camTarget_view2 = payload.target;
         },
         reset_allState(state, action) {
             return initialState;
@@ -90,6 +97,7 @@ export const {
     change_s_isFocus,
     change_s_view1Component,
     change_s_annotation_b1,
+    change_s_camPosNTarget_view2,
     reset_allState,
 } = threeDslice.actions;
 

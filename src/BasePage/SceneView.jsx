@@ -13,9 +13,9 @@ export default function SceneViews() {
             <View key="view1" index={1} className="absolute w-full h-full">
                 <ViewContent1 />
             </View>
-            <View key="view2" index={2} className="absolute z-[10] bottom-5 right-5 w-[15%] h-[15%]">
+            {/* <View key="view2" index={2} className="absolute z-[10] bottom-5 right-5 w-[15%] h-[15%]">
                 <ViewContent2 />
-            </View>
+            </View> */}
         </>
     )
 }

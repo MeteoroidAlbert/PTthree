@@ -7,7 +7,7 @@ export default function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/plant" element={<ThreeScene/>}/>
+                <Route path="/" element={<ThreeScene/>}/>
             </Routes>
         </BrowserRouter>
     )

@@ -74,24 +74,15 @@ export default function Building1({ position, scale, rotation }) {
             const y = isVisible 
                 ? Number(((-vector.y + 1) / 2 * gl.domElement.clientHeight).toFixed(0))
                 : null;
-
-            
-
             const targetAnno = s_annotation_b1[id]
             const threshold = 0.1;
-
             const hasChanged =
                 !targetAnno ||
                 Math.abs(targetAnno?.x - x) > threshold ||
                 Math.abs(targetAnno?.y - y) > threshold;
-
-            
-
             if (hasChanged) {
                 dispatch(change_s_annotation_b1({ [id]: { x, y } }));
-
             }
-
         });
 
 

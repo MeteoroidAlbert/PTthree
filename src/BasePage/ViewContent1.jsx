@@ -9,6 +9,7 @@ import Building1 from "../Model/building1";
 import Building2 from "../Model/building2";
 import Building3 from "../Model/building3";
 import { componentMap } from "../util";
+import { useFrame, useThree } from "@react-three/fiber";
 
 
 
@@ -42,12 +43,13 @@ export default function ViewContent1() {
 
             {/*相機*/}
             <ThirdPersonController
+                viewType="view1"
                 cameraPosition={camPos}
                 orbitTarget={camTarget}
             />
             {/*坐標軸 && 輔助器*/}
-            <primitive object={new THREE.AxesHelper(1000)} />
-            <GizmoHelper
+            {/* <primitive object={new THREE.AxesHelper(1000)} /> */}
+            {/* <GizmoHelper
                 alignment="bottom-right" // 在畫布上的位置
                 margin={[80, 80]} // 距離畫布邊緣
             >
@@ -55,7 +57,7 @@ export default function ViewContent1() {
                     axisColors={['red', 'green', 'blue']}
                     labelColor="white"
                 />
-            </GizmoHelper>
+            </GizmoHelper> */}
 
         </>
     )
