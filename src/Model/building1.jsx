@@ -34,7 +34,7 @@ export default function Building1({ position, scale, rotation }) {
 
     const { camera, gl } = useThree();
 
-    const { materials, animations, scene } = useGLTF("/modal/b1/scene.gltf"); //---> 取得.gltf模型內容
+    const { materials, animations, scene } = useGLTF("/3D_models/b1/scene.gltf"); //---> 取得.gltf模型內容
     const { actions } = useAnimations(animations, modelRef);   // -----------------> 綁定動畫到指定模型上
 
     // 建立動畫、效果參數
@@ -158,7 +158,7 @@ export default function Building1({ position, scale, rotation }) {
 
     return (
         <group ref={modelRef} position={position} scale={scale} rotation={rotation}>
-            <Gltf src="/modal/b1/scene.gltf" position={[0, 0, 0]} onClick={handleClick} />
+            <Gltf src="/3D_models/b1/scene.gltf" position={[0, 0, 0]} onClick={handleClick} />
         </group>
     );
 }

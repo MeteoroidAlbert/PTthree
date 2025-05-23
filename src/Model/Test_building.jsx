@@ -13,7 +13,7 @@ export default function TestBuilding({ position, scale, rotation }) {
     })
     const modleRef = useRef();
 
-    const { animations, materials, scene } = useGLTF("/modal/test/Scene.gltf")
+    const { animations, materials, scene } = useGLTF("/3D_models/test/Scene.gltf")
     const { actions } = useAnimations(animations, modleRef);
 
     const handleClick = (e) => {
@@ -85,7 +85,7 @@ export default function TestBuilding({ position, scale, rotation }) {
     return (
         <Gltf
             ref={modleRef}
-            src={"/modal/test/Scene.gltf"}
+            src={"/3D_models/test/Scene.gltf"}
             position={position}
             scale={scale}
             rotation={rotation}

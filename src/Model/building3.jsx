@@ -23,7 +23,7 @@ export default function Building3({ position, scale, rotation }) {
         "DA_17K_System_Plane_5": false,
     });
 
-    const { materials, animations, scene } = useGLTF("/modal/b3/scene.gltf");
+    const { materials, animations, scene } = useGLTF("/3D_models/b3/scene.gltf");
     const { actions } = useAnimations(animations, modelRef);
 
     const { opacity } = useSpring({
@@ -115,7 +115,7 @@ export default function Building3({ position, scale, rotation }) {
     return (
         <group ref={modelRef} position={position} scale={scale} rotation={rotation}>
             {/* <primitive object={scene} onClick={handleClick} /> */}
-            <Gltf src="/modal/b3/scene.gltf" position={[0, 0, 0]} onClick={handleClick}/>
+            <Gltf src="/3D_models/b3/scene.gltf" position={[0, 0, 0]} onClick={handleClick}/>
         </group>
     );
 }

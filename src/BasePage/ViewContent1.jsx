@@ -31,7 +31,7 @@ export default function ViewContent1() {
                 position={[0, 50, 0]}
             />
             {/*環境貼圖------------------------------->關鍵: 將自動套用到3D物件的envMap上，尤其使金屬光澤正常呈現，避免光線全吸收後模型變成黑色*/}
-            <Environment files="/image/environment/empty_warehouse_01_1k.exr" />
+            <Environment files="/3D_images/environment/empty_warehouse_01_1k.exr" />
             {/*3D物件*/}
             {s_view1Component.length > 0
                 && s_view1Component.map(({ name, props }, i) =>
